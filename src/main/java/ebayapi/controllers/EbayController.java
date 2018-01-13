@@ -1,8 +1,9 @@
 package ebayapi.controllers;
 
-import ebayapi.models.SearchResult;
+import ebayapi.models.EbaySearchResult;
 import ebayapi.services.EbayHttpService;
 import ebayapi.utils.EbaySearchRequest;
+import ebayapi.services.EbaySearchParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,14 +14,19 @@ public class EbayController {
     @Autowired
     EbayHttpService httpService;
 
+    @Autowired
+    EbaySearchParser searchParser;
+
     @RequestMapping("/")
-    public SearchResult hello() {
-        return new SearchResult("1");
+    public EbaySearchResult hello() {
+        return new EbaySearchResult("1");
     }
 
     @RequestMapping("/getEbay")
     public String helloworld() {
-        return httpService.httpGet("/itm/302276015487");
+        String html = httpService.httpGet("/itm/302276015487");
+        return html;
+
     }
 
     @RequestMapping("/getFFIV")
