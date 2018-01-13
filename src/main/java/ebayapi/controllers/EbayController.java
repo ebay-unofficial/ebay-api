@@ -1,6 +1,6 @@
-package ebayapi.controller;
+package ebayapi.controllers;
 
-import ebayapi.model.SearchResult;
+import ebayapi.models.SearchResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

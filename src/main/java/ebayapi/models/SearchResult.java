@@ -1,4 +1,4 @@
-package ebayapi.model;
+package ebayapi.models;
 
 public class SearchResult {
 
