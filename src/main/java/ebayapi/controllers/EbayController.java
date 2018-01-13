@@ -2,6 +2,7 @@ package ebayapi.controllers;
 
 import ebayapi.models.SearchResult;
 import ebayapi.services.EbayHttpService;
+import ebayapi.utils.EbaySearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,11 @@ public class EbayController {
     @RequestMapping("/getEbay")
     public String helloworld() {
         return httpService.httpGet("/itm/302276015487");
+    }
+
+    @RequestMapping("/getFFIV")
+    public String getFFIV() {
+        return httpService.httpGet(new EbaySearchRequest("Final Fantasy IV"));
     }
 
 }

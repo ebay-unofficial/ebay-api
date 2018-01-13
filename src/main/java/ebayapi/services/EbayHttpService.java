@@ -1,5 +1,6 @@
 package ebayapi.services;
 
+import ebayapi.utils.EbaySearchRequest;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -25,6 +26,10 @@ public class EbayHttpService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public String httpGet(EbaySearchRequest request) {
+        return httpGet(request.toString());
     }
 
 }
