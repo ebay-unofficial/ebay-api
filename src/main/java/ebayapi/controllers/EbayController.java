@@ -1,6 +1,8 @@
 package ebayapi.controllers;
 
+import ebayapi.models.EbayDetailItem;
 import ebayapi.models.EbaySearchResult;
+import ebayapi.services.EbayDetailParser;
 import ebayapi.services.EbayHttpService;
 import ebayapi.utils.EbaySearchRequest;
 import ebayapi.services.EbaySearchParser;
@@ -16,6 +18,9 @@ public class EbayController {
 
     @Autowired
     EbaySearchParser searchParser;
+
+    @Autowired
+    EbayDetailParser detailParser;
 
     @RequestMapping("/")
     public EbaySearchResult hello() {
@@ -38,6 +43,11 @@ public class EbayController {
     public EbaySearchResult getFFIVJson() {
         String html = httpService.httpGet(new EbaySearchRequest("The Legend of Zelda Twilight Princess Gamecube"));
         return searchParser.getSearch(html);
+    }
+
+    @RequestMapping("/loz")
+    public EbayDetailItem getLoz() {
+        return detailParser.parseDetailItem("302276015487");
     }
 
 }

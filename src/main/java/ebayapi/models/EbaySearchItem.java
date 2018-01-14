@@ -5,21 +5,23 @@ import ebayapi.utils.EbayItemCondition;
 
 public class EbaySearchItem {
 
-    private String id;
+    protected String id;
 
-    private String title;
+    protected String title;
 
-    private float price;
+    protected double price;
 
-    private float shipping;
+    protected String currency;
 
-    private EbayItemCondition condition;
+    protected double shipping;
 
-    private boolean auction;
+    protected EbayItemCondition condition;
 
-    private boolean buyNow;
+    protected boolean auction;
 
-    private boolean suggestPrice;
+    protected boolean buyNow;
+
+    protected boolean suggestPrice;
 
     public String getId() {
         return id;
@@ -37,23 +39,23 @@ public class EbaySearchItem {
         this.title = title;
     }
 
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
-    public float getShipping() {
+    public double getShipping() {
         return shipping;
     }
 
-    public void setShipping(float shipping) {
+    public void setShipping(double shipping) {
         this.shipping = shipping;
     }
 
-    public float getTotalPrice() {
+    public double getTotalPrice() {
         return price + shipping;
     }
 
@@ -87,5 +89,13 @@ public class EbaySearchItem {
 
     public void setSuggestPrice(boolean suggestPrice) {
         this.suggestPrice = suggestPrice;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 }
