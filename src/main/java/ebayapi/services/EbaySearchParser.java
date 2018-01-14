@@ -2,12 +2,13 @@ package ebayapi.services;
 
 import ebayapi.models.EbaySearchItem;
 import ebayapi.models.EbaySearchResult;
-import ebayapi.utils.EbayAuctionType;
 import ebayapi.utils.EbayItemCondition;
+import ebayapi.utils.EbaySearchRequest;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,6 +20,13 @@ import java.util.regex.Pattern;
 public class EbaySearchParser {
 
     private static final String DECIMAL_PATTERN = "(\\d+([.,]\\d+)?)";
+
+    @Autowired
+    EbayHttpService httpService;
+
+    public EbaySearchResult getSearch(EbaySearchRequest request) {
+        return getSearch(httpService.httpGet(request));
+    }
 
     public EbaySearchResult getSearch(String html) {
         Document parsedHtml = parse(html);
