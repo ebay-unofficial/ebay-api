@@ -15,7 +15,11 @@ public class EbaySearchItem {
 
     private EbayItemCondition condition;
 
-    private EbayAuctionType auctionType;
+    private boolean auction;
+
+    private boolean buyNow;
+
+    private boolean suggestPrice;
 
     public String getId() {
         return id;
@@ -61,11 +65,27 @@ public class EbaySearchItem {
         this.condition = condition;
     }
 
-    public EbayAuctionType getAuctionType() {
-        return auctionType;
+    public boolean isAuction() {
+        return auction;
     }
 
-    public void setAuctionType(EbayAuctionType auctionType) {
-        this.auctionType = auctionType;
+    public void setAuction(boolean auction) {
+        this.auction = auction;
+    }
+
+    public boolean isBuyNow() {
+        return buyNow;
+    }
+
+    public void setBuyNow(boolean buyNow) {
+        this.buyNow = buyNow;
+    }
+
+    public boolean isSuggestPrice() {
+        return suggestPrice;
+    }
+
+    public void setSuggestPrice(boolean suggestPrice) {
+        this.suggestPrice = suggestPrice;
     }
 }

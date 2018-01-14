@@ -2,10 +2,11 @@ package ebayapi.services;
 
 import ebayapi.models.EbaySearchItem;
 import ebayapi.models.EbaySearchResult;
+import ebayapi.utils.EbayAuctionType;
+import ebayapi.utils.EbayItemCondition;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
@@ -35,11 +36,43 @@ public class EbaySearchParser {
     }
 
     private EbaySearchItem getListItem(Element e) {
+        EbaySearchItem item = new EbaySearchItem();
 
         Elements iid = e.getElementsByAttribute("iid");
         String itemId = iid.attr("iid");
-        EbaySearchItem item = new EbaySearchItem();
         item.setId(itemId);
+
+        Elements titleElement = e.select("h3 > a");
+        String title = titleElement.text();
+        item.setTitle(title);
+
+        String format = e.getElementsByClass("lvformat").text();
+        if (format.toLowerCase().contains("gebot")) {
+            item.setAuction(true);
+        }
+        if (format.toLowerCase().contains("sofort-kauf") || format.toLowerCase().contains("preisvorschlag")) {
+            item.setBuyNow(true);
+        }
+        if (format.toLowerCase().contains("preisvorschlag")) {
+            item.setSuggestPrice(true);
+        }
+
+        Element lvsubtitle = e.getElementsByClass("lvsubtitle").last();
+        String conditionText;
+        if (lvsubtitle != null) {
+            conditionText = lvsubtitle.text();
+        } else {
+            conditionText = "";
+        }
+        EbayItemCondition itemCondition = EbayItemCondition.UNKNOWN;
+        for (EbayItemCondition condition : EbayItemCondition.values()) {
+            if (conditionText.toLowerCase().contains(condition.name.toLowerCase())) {
+                itemCondition = condition;
+                break;
+            }
+        }
+        item.setCondition(itemCondition);
+
         return item;
     }
 

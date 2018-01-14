@@ -2,6 +2,14 @@ package ebayapi.utils;
 
 public enum EbayAuctionType {
 
-    AUCTION,
-    BUY_NOW;
+    AUCTION("Auktion"),
+    BUY_NOW("Sofort-Kaufen");
+
+
+    public String name;
+
+
+    EbayAuctionType(String name) {
+        this.name = name;
+    }
 }

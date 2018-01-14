@@ -31,12 +31,12 @@ public class EbayController {
 
     @RequestMapping("/getFFIV")
     public String getFFIV() {
-        return httpService.httpGet(new EbaySearchRequest("Final Fantasy IV").inAuction());
+        return httpService.httpGet(new EbaySearchRequest("Final Fantasy IV").inAuctions());
     }
 
     @RequestMapping("/getFFIVjson")
     public EbaySearchResult getFFIVJson() {
-        String html = httpService.httpGet(new EbaySearchRequest("Final Fantasy IV"));
+        String html = httpService.httpGet(new EbaySearchRequest("The Legend of Zelda Twilight Princess Gamecube"));
         return searchParser.getSearch(html);
     }
 

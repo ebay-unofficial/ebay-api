@@ -28,8 +28,9 @@ public class EbaySearchRequest {
         return this;
     }
 
-    public EbayLocationType preferLocation(EbayLocationType locationType) {
+    public EbaySearchRequest preferLocation(EbayLocationType locationType) {
         params += "LH_PrefLoc=" + locationType.id;
+        return this;
     }
 
     @Override
