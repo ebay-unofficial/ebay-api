@@ -25,8 +25,9 @@ public class EbayDetailParser {
         EbayDetailItem item = new EbayDetailItem(id);
 
         item.setSeller(parseSeller(document));
+
+        document.getElementById("itemTitle").children().remove();
         item.setTitle(document.getElementById("itemTitle").text());
-        // item.setCondition(document.getElementById("vi-itm-cond").text());
 
         if (document.getElementById("bidBtn_btn") != null) {
             item.setAuctionType(EbayAuctionType.AUCTION);
