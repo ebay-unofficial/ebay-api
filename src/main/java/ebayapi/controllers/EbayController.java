@@ -7,6 +7,7 @@ import ebayapi.services.EbayHttpService;
 import ebayapi.utils.EbaySearchRequest;
 import ebayapi.services.EbaySearchParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,10 +53,15 @@ public class EbayController {
     }
 
     @RequestMapping("/api/search")
-    public EbaySearchResult search(@RequestParam(required = true, name = "s") String search) {
+    public EbaySearchResult search(@RequestParam("s") String search) {
         EbaySearchRequest request = new EbaySearchRequest(search);
         String html = httpService.httpGet(request);
         return searchParser.getSearch(html);
+    }
+
+    @RequestMapping("/api/item/{id}")
+    public EbayDetailItem getItem(@PathVariable String id) {
+        return detailParser.parseDetailItem(id);
     }
 
 }
