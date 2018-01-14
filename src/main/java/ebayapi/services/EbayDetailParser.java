@@ -43,6 +43,14 @@ public class EbayDetailParser {
         Matcher m = Pattern.compile(DECIMAL_PATTERN).matcher(document.getElementById("fshippingCost").text());
         item.setShipping(m.find() ? Double.parseDouble(m.group(1).replace(',', '.')) : 0);
 
+        if (document.getElementsByClass("pd-img") != null) {
+            item.addPaymentMethod("Pay-Pal");
+        }
+        document.getElementsByClass("hideGspPymt").forEach(element -> {
+            element.children().remove();
+            item.addPaymentMethod(element.text());
+        });
+
         return item;
     }
 
