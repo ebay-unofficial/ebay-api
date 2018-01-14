@@ -4,6 +4,8 @@ import ebayapi.models.EbayDetailItem;
 import ebayapi.models.EbaySearchResult;
 import ebayapi.services.EbayDetailParser;
 import ebayapi.services.EbayHttpService;
+import ebayapi.utils.EbayLocationType;
+import ebayapi.utils.EbayOrderType;
 import ebayapi.utils.EbaySearchRequest;
 import ebayapi.services.EbaySearchParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/api")
 public class EbayController {
 
     @Autowired
@@ -24,42 +27,52 @@ public class EbayController {
     @Autowired
     EbayDetailParser detailParser;
 
-    @RequestMapping("/")
-    public EbaySearchResult hello() {
-        return new EbaySearchResult("1");
-    }
-
-    @RequestMapping("/getEbay")
-    public String helloworld() {
-        String html = httpService.httpGet("/itm/302276015487");
-        return html;
-
-    }
-
-    @RequestMapping("/getFFIV")
-    public String getFFIV() {
-        return httpService.httpGet(new EbaySearchRequest("Final Fantasy IV").inAuctions());
-    }
-
-    @RequestMapping("/getFFIVjson")
-    public EbaySearchResult getFFIVJson() {
-        String html = httpService.httpGet(new EbaySearchRequest("The Legend of Zelda Twilight Princess Gamecube"));
-        return searchParser.getSearch(html);
-    }
-
-    @RequestMapping("/loz")
-    public EbayDetailItem getLoz() {
-        return detailParser.parseDetailItem("302276015487");
-    }
-
-    @RequestMapping("/api/search")
+    @RequestMapping("/search")
     public EbaySearchResult search(@RequestParam("s") String search) {
-        EbaySearchRequest request = new EbaySearchRequest(search);
-        String html = httpService.httpGet(request);
-        return searchParser.getSearch(html);
+        return searchParser.getSearch(new EbaySearchRequest(search));
     }
 
-    @RequestMapping("/api/item/{id}")
+    @RequestMapping("/search/{order}")
+    public EbaySearchResult search(@RequestParam("s") String search, @PathVariable("order") String order) {
+        return searchParser.getSearch(new EbaySearchRequest(search).orderBy(order));
+    }
+
+    @RequestMapping("/search/{location}/{order}")
+    public EbaySearchResult search(@RequestParam("s") String search, @PathVariable("location") String location, @PathVariable("order") String order) {
+        return searchParser.getSearch(new EbaySearchRequest(search).preferLocation(location).orderBy(order));
+    }
+
+    @RequestMapping("/auction")
+    public EbaySearchResult searchAuction(@RequestParam("s") String search) {
+        return searchParser.getSearch(new EbaySearchRequest(search).inAuctions());
+    }
+
+    @RequestMapping("/auction/{order}")
+    public EbaySearchResult searchAuction(@RequestParam("s") String search, @PathVariable("order") String order) {
+        return searchParser.getSearch(new EbaySearchRequest(search).inAuctions().orderBy(order));
+    }
+
+    @RequestMapping("/auction/{location}/{order}")
+    public EbaySearchResult searchAuction(@RequestParam("s") String search, @PathVariable("location") String location, @PathVariable("order") String order) {
+        return searchParser.getSearch(new EbaySearchRequest(search).inAuctions().preferLocation(location).orderBy(order));
+    }
+
+    @RequestMapping("/buynow")
+    public EbaySearchResult searchBuynow(@RequestParam("s") String search) {
+        return searchParser.getSearch(new EbaySearchRequest(search).inBuyNow());
+    }
+
+    @RequestMapping("/buynow/{order}")
+    public EbaySearchResult searchBuynow(@RequestParam("s") String search, @PathVariable("order") String order) {
+        return searchParser.getSearch(new EbaySearchRequest(search).inBuyNow().orderBy(order));
+    }
+
+    @RequestMapping("/buynow/{location}/{order}")
+    public EbaySearchResult searchBuynow(@RequestParam("s") String search, @PathVariable("location") String location, @PathVariable("order") String order) {
+        return searchParser.getSearch(new EbaySearchRequest(search).inBuyNow().preferLocation(location).orderBy(order));
+    }
+
+    @RequestMapping("/item/{id}")
     public EbayDetailItem getItem(@PathVariable String id) {
         return detailParser.parseDetailItem(id);
     }
