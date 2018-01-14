@@ -12,9 +12,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class EbaySearchParser {
+
+    private static final String DECIMAL_PATTERN = "(\\d+([.,]\\d+)?)";
 
     public EbaySearchResult getSearch(String html) {
         Document parsedHtml = parse(html);
@@ -72,6 +76,26 @@ public class EbaySearchParser {
             }
         }
         item.setCondition(itemCondition);
+
+        String priceText = e.getElementsByClass("lvprice").text();
+        Matcher priceMatcher = Pattern.compile(DECIMAL_PATTERN).matcher(priceText);
+        if (priceMatcher.find()) {
+            String rawNumber = priceMatcher.group(1).replace(",", ".");
+            double price = Double.parseDouble(rawNumber);
+            item.setPrice(price);
+        }
+
+        String feeText = e.getElementsByClass("fee").text();
+        Matcher feeMatcher = Pattern.compile(DECIMAL_PATTERN).matcher(feeText);
+        if (feeMatcher.find()) {
+            String rawNumber = feeMatcher.group(1).replace(",", ".");
+            double fee = Double.parseDouble(rawNumber);
+            item.setShipping(fee);
+        }
+
+        Element currencyElement = e.select("li.lvprice > span b").first();
+        String currency = currencyElement.text();
+        item.setCurrency(currency);
 
         return item;
     }

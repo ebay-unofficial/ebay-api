@@ -28,4 +28,8 @@ public class EbaySearchResult {
     public void setItems(List<EbaySearchItem> items) {
         this.items = items;
     }
+
+    public int getSize() {
+        return items.size();
+    }
 }
