@@ -5,17 +5,17 @@ import ebayapi.utils.EbayItemCondition;
 
 public class EbaySearchItem {
 
-    private String id;
+    protected String id;
 
-    private String title;
+    protected String title;
 
-    private float price;
+    protected float price;
 
-    private float shipping;
+    protected float shipping;
 
-    private EbayItemCondition condition;
+    protected EbayItemCondition condition;
 
-    private EbayAuctionType auctionType;
+    protected EbayAuctionType auctionType;
 
     public String getId() {
         return id;

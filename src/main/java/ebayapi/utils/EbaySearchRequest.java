@@ -28,18 +28,23 @@ public class EbaySearchRequest {
         return this;
     }
 
-    public EbayLocationType preferLocation(EbayLocationType locationType) {
+    public EbaySearchRequest preferLocation(EbayLocationType locationType) {
         params += "LH_PrefLoc=" + locationType.id;
+        return this;
+    }
+
+    public EbaySearchRequest limit(int limit) {
+        params += "_ipg=" + limit;
+        return this;
     }
 
     @Override
     public String toString() {
-        // isRefine=true&LH_BIN=1&_sop=15&_nkw=zelda+link+to+the+past&LH_PrefLoc=2&_mwBanner=1
         try {
             return "/sch/i.html?_nkw=" + URLEncoder.encode(term, "UTF-8") + params;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        return "";
+        return null;
     }
 }
