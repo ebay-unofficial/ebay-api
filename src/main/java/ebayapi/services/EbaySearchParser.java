@@ -5,8 +5,11 @@ import ebayapi.models.EbaySearchResult;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
+import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,11 +24,23 @@ public class EbaySearchParser {
     }
 
     private List<EbaySearchItem> getSearchItems(Document html) {
-        return null;
+        ArrayList<EbaySearchItem> items = new ArrayList<>();
+        Element listViewInner = html.getElementById("ListViewInner");
+        Elements children = listViewInner.select("li[listingid]");
+        children.forEach(e -> {
+            EbaySearchItem item = getListItem(e);
+            items.add(item);
+        });
+        return items;
     }
 
-    private EbaySearchItem getListItem(Document html) {
-        return null;
+    private EbaySearchItem getListItem(Element e) {
+
+        Elements iid = e.getElementsByAttribute("iid");
+        String itemId = iid.attr("iid");
+        EbaySearchItem item = new EbaySearchItem();
+        item.setId(itemId);
+        return item;
     }
 
     private Document parse(String html) {

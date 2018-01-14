@@ -34,4 +34,10 @@ public class EbayController {
         return httpService.httpGet(new EbaySearchRequest("Final Fantasy IV"));
     }
 
+    @RequestMapping("/getFFIVjson")
+    public EbaySearchResult getFFIVJson() {
+        String html = httpService.httpGet(new EbaySearchRequest("Final Fantasy IV"));
+        return searchParser.getSearch(html);
+    }
+
 }
