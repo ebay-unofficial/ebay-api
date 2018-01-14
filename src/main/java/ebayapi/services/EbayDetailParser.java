@@ -30,11 +30,11 @@ public class EbayDetailParser {
         item.setTitle(document.getElementById("itemTitle").text());
 
         if (document.getElementById("bidBtn_btn") != null) {
-            item.setAuctionType(EbayAuctionType.AUCTION);
+            item.setAuction(true);
             item.setPrice(Double.parseDouble(document.getElementById("prcIsum_bidPrice").attr("content")));
         }
         if (document.getElementById("binBtn_btn") != null) {
-            item.setAuctionType(EbayAuctionType.BUY_NOW);
+            item.setBuyNow(true);
             item.setPrice(Double.parseDouble(document.getElementById("prcIsum").attr("content")));
         }
 
