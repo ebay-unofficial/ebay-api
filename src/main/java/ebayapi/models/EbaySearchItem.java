@@ -9,9 +9,11 @@ public class EbaySearchItem {
 
     protected String title;
 
-    protected float price;
+    protected double price;
 
-    protected float shipping;
+    protected String currency;
+
+    protected double shipping;
 
     protected EbayItemCondition condition;
 
@@ -33,23 +35,23 @@ public class EbaySearchItem {
         this.title = title;
     }
 
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
-    public float getShipping() {
+    public double getShipping() {
         return shipping;
     }
 
-    public void setShipping(float shipping) {
+    public void setShipping(double shipping) {
         this.shipping = shipping;
     }
 
-    public float getTotalPrice() {
+    public double getTotalPrice() {
         return price + shipping;
     }
 
@@ -67,5 +69,13 @@ public class EbaySearchItem {
 
     public void setAuctionType(EbayAuctionType auctionType) {
         this.auctionType = auctionType;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 }
