@@ -3,6 +3,7 @@ package ebayapi.services;
 import ebayapi.models.EbayDetailItem;
 import ebayapi.models.EbaySeller;
 import ebayapi.utils.EbayAuctionType;
+import ebayapi.utils.EbayItemCondition;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ public class EbayDetailParser {
 
         document.getElementById("itemTitle").children().remove();
         item.setTitle(document.getElementById("itemTitle").text());
+
+        item.setCondition(EbayItemCondition.parse(document.getElementById("vi-itm-cond").text()));
 
         if (document.getElementById("bidBtn_btn") != null) {
             item.setAuction(true);
