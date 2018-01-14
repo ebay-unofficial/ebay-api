@@ -31,7 +31,7 @@ public class EbayController {
 
     @RequestMapping("/getFFIV")
     public String getFFIV() {
-        return httpService.httpGet(new EbaySearchRequest("Final Fantasy IV"));
+        return httpService.httpGet(new EbaySearchRequest("Final Fantasy IV").inAuction());
     }
 
 }
