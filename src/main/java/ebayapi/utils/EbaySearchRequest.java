@@ -7,37 +7,29 @@ public class EbaySearchRequest {
 
     private String term;
     private String params;
-    private boolean isCompleted = false;
-    private boolean isSold = false;
 
     public EbaySearchRequest(String term) {
         this.term = term;
         params = "";
     }
 
-    public EbaySearchRequest inComplete() {
-        if (!isCompleted) {
-            params += "&LH_Complete=1";
-            isCompleted = true;
-        }
+    public EbaySearchRequest isComplete(boolean complete) {
+        params += "&LH_Complete=" + (complete ? "1" : "0");
         return this;
     }
 
-    public EbaySearchRequest inSold() {
-        if (!isSold) {
-            params += "&LH_Sold=1";
-            isSold = true;
-        }
-        return inComplete();
+    public EbaySearchRequest isSold(boolean sold) {
+        params += "&LH_Sold=" + (sold ? "1" : "0");
+        return isComplete(sold);
     }
 
-    public EbaySearchRequest inAuctions() {
-        params += "&LH_Auction=1";
+    public EbaySearchRequest isAuctions(boolean auction) {
+        params += "&LH_Auction=" + (auction ? "1" : "0");
         return this;
     }
 
-    public EbaySearchRequest inBuyNow() {
-        params += "&LH_BIN=1";
+    public EbaySearchRequest isBuyNow(boolean buyNow) {
+        params += "&LH_BIN=" + (buyNow ? "1" : "0");
         return this;
     }
 
