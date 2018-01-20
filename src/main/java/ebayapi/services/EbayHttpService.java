@@ -22,7 +22,7 @@ public class EbayHttpService {
 
     public String httpGet(String url) {
         try {
-            lastRequest = baseUrl + url;
+            lastRequest = url;
             return IOUtils.toString(httpClient.execute(new HttpGet(baseUrl + url)).getEntity().getContent());
         } catch (IOException e) {
             e.printStackTrace();
@@ -35,6 +35,6 @@ public class EbayHttpService {
     }
 
     public String getLastRequest() {
-        return lastRequest;
+        return baseUrl + lastRequest;
     }
 }
