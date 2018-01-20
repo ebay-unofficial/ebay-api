@@ -7,10 +7,28 @@ public class EbaySearchRequest {
 
     private String term;
     private String params;
+    private boolean isCompleted = false;
+    private boolean isSold = false;
 
     public EbaySearchRequest(String term) {
         this.term = term;
         params = "";
+    }
+
+    public EbaySearchRequest inComplete() {
+        if (!isCompleted) {
+            params += "&LH_Complete=1";
+            isCompleted = true;
+        }
+        return this;
+    }
+
+    public EbaySearchRequest inSold() {
+        if (!isSold) {
+            params += "&LH_Sold=1";
+            isSold = true;
+        }
+        return inComplete();
     }
 
     public EbaySearchRequest inAuctions() {
