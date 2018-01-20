@@ -21,7 +21,7 @@ public class EbayDetailParser {
     private static final String DECIMAL_PATTERN = "(\\d+([.,]\\d+)?)";
 
     public EbayDetailItem parseDetailItem(String id) {
-        Document document = Jsoup.parse(httpService.httpGet("/itm/" + id));
+        Document document = Jsoup.parse(httpService.httpGet("/itm/" + id + "?orig_cvip=true"));
 
         EbayDetailItem item = new EbayDetailItem(id);
 
