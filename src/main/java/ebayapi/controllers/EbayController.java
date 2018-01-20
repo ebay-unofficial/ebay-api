@@ -30,11 +30,11 @@ public class EbayController {
     @RequestMapping("/search")
     public EbaySearchResult search(
             @RequestParam("s") String search,
-            @RequestParam("auction") boolean auction,
-            @RequestParam("buynow") boolean buyNow,
-            @RequestParam("sold") boolean sold,
-            @RequestParam("location") String location,
-            @RequestParam("order") String order
+            @RequestParam(value = "auction", required = false, defaultValue = "false") boolean auction,
+            @RequestParam(value = "buynow", required = false, defaultValue = "false") boolean buyNow,
+            @RequestParam(value = "sold", required = false, defaultValue = "false") boolean sold,
+            @RequestParam(value = "location", required = false, defaultValue = "") String location,
+            @RequestParam(value = "order", required = false, defaultValue = "") String order
     ) {
         return searchParser.getSearch(new EbaySearchRequest(search)
                 .isAuctions(auction)
