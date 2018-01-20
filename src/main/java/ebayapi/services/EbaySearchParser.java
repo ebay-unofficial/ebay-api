@@ -31,7 +31,8 @@ public class EbaySearchParser {
     public EbaySearchResult getSearch(String html) {
         Document parsedHtml = parse(html);
         List<EbaySearchItem> searchItems = getSearchItems(parsedHtml);
-        EbaySearchResult result = new EbaySearchResult("");
+        EbaySearchResult result = new EbaySearchResult();
+        result.setUrl(httpService.getLastRequest());
         result.setItems(searchItems);
         return result;
     }

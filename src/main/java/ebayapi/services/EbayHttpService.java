@@ -14,6 +14,7 @@ public class EbayHttpService {
 
     private HttpClient httpClient;
     private String baseUrl = "https://www.ebay.de";
+    private String lastRequest = "";
 
     public EbayHttpService() {
         httpClient = HttpClientBuilder.create().build();
@@ -21,6 +22,7 @@ public class EbayHttpService {
 
     public String httpGet(String url) {
         try {
+            lastRequest = baseUrl + url;
             return IOUtils.toString(httpClient.execute(new HttpGet(baseUrl + url)).getEntity().getContent());
         } catch (IOException e) {
             e.printStackTrace();
@@ -32,4 +34,7 @@ public class EbayHttpService {
         return httpGet(request.toString());
     }
 
+    public String getLastRequest() {
+        return lastRequest;
+    }
 }
