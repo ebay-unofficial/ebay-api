@@ -12,15 +12,16 @@ import java.io.IOException;
 @Service
 public class EbayHttpService {
 
-    private HttpClient httpClient;
+
     private String baseUrl = "https://www.ebay.de";
     private String lastRequest = "";
 
     public EbayHttpService() {
-        httpClient = HttpClientBuilder.create().build();
+
     }
 
     public String httpGet(String url) {
+        HttpClient httpClient = HttpClientBuilder.create().build();
         try {
             lastRequest = url;
             return IOUtils.toString(httpClient.execute(new HttpGet(baseUrl + url)).getEntity().getContent());
