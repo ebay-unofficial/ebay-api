@@ -32,11 +32,11 @@ public class EbayDetailParser {
 
         item.setCondition(EbayItemCondition.parse(document.getElementById("vi-itm-cond").text()));
 
-        if (document.getElementById("bidBtn_btn") != null) {
+        if (document.getElementById("prcIsum_bidPrice") != null) {
             item.setAuction(true);
             item.setPrice(Double.parseDouble(document.getElementById("prcIsum_bidPrice").attr("content")));
         }
-        if (document.getElementById("binBtn_btn") != null) {
+        if (document.getElementById("prcIsum") != null) {
             item.setBuyNow(true);
             item.setPrice(Double.parseDouble(document.getElementById("prcIsum").attr("content")));
         }
