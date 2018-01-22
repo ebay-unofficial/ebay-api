@@ -3,12 +3,12 @@
 ## usage 
 `/search?s=product` search a product on ebay
 
-`/product/{id}` get specific product information
+`/item/{id}` get specific product information
 
 ### search params 
 `s={input}` search for input 
 
-`location=(ebay|country|continental|global)` search in location 
+`location=(ebay|region|continental|global)` search in prefered location 
 
 `buynow=(true|false)` active buynow 
 
@@ -16,4 +16,4 @@
 
 `sold=(true|false)` search in sold products
 
-`sort={option}` active sort option
+`order=(best|soonest|fewest|most|nearest|newly|lowest|highest)` active order by options
