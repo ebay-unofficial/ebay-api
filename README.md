@@ -1,4 +1,5 @@
 # unofficial ebay-api
+You can use `http://ebay.timkilian.pl/api/` or host it yourself.
 
 ## usage 
 `/search?s=product` search a product on ebay
