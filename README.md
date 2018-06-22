@@ -18,3 +18,6 @@ You can use `http://ebay.timkilian.pl/api/` or host it yourself.
 `sold=(true|false)` search in sold products
 
 `order=(best|soonest|fewest|most|nearest|newly|lowest|highest)` active order by options
+
+# license 
+MIT
