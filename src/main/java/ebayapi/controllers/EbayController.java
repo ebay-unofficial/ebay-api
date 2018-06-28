@@ -32,7 +32,8 @@ public class EbayController {
             @RequestParam(value = "buynow", required = false, defaultValue = "false") boolean buyNow,
             @RequestParam(value = "sold", required = false, defaultValue = "false") boolean sold,
             @RequestParam(value = "location", required = false, defaultValue = "") String location,
-            @RequestParam(value = "order", required = false, defaultValue = "") String order
+            @RequestParam(value = "order", required = false, defaultValue = "") String order,
+            @RequestParam(value = "limit", required = false, defaultValue = "25") int limit
     ) {
         return searchParser.getSearch(new EbaySearchRequest(search)
                 .isAuctions(auction)
@@ -40,6 +41,7 @@ public class EbayController {
                 .isSold(sold)
                 .preferLocation(location)
                 .orderBy(order)
+                .limit(limit)
         );
     }
 
