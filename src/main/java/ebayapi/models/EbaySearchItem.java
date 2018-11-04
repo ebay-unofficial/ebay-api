@@ -23,6 +23,8 @@ public class EbaySearchItem {
 
     protected boolean suggestPrice;
 
+    protected String url;
+
     public String getId() {
         return id;
     }
@@ -97,5 +99,9 @@ public class EbaySearchItem {
 
     public void setCurrency(String currency) {
         this.currency = currency;
+    }
+
+    public String getUrl() {
+        return "https://www.ebay.de/itm/" + this.id;
     }
 }
