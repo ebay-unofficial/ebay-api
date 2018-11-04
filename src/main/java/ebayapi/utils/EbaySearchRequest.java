@@ -48,7 +48,7 @@ public class EbaySearchRequest {
     }
 
     public EbaySearchRequest orderBy(EbayOrderType orderType) {
-        params += "_sop=" + orderType.id;
+        params += "&_sop=" + orderType.id;
         return this;
     }
 
@@ -63,12 +63,12 @@ public class EbaySearchRequest {
     }
 
     public EbaySearchRequest preferLocation(EbayLocationType locationType) {
-        params += "LH_PrefLoc=" + locationType.id;
+        params += "&LH_PrefLoc=" + locationType.id;
         return this;
     }
 
     public EbaySearchRequest limit(int limit) {
-        params += "_ipg=" + limit;
+        params += "&_ipg=" + limit;
         return this;
     }
 
