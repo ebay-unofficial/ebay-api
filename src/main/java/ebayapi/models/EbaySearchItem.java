@@ -2,6 +2,9 @@ package ebayapi.models;
 
 import ebayapi.utils.EbayItemCondition;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EbaySearchItem {
 
     protected String id;
@@ -22,7 +25,11 @@ public class EbaySearchItem {
 
     protected boolean suggestPrice;
 
-    protected String imgUrl;
+    protected List<EbayItemImage> images;
+
+    public EbaySearchItem() {
+        this.images = new ArrayList<>();
+    }
 
     public String getId() {
         return id;
@@ -100,12 +107,12 @@ public class EbaySearchItem {
         this.currency = currency;
     }
 
-    public String getImgUrl() {
-        return imgUrl;
+    public List<EbayItemImage> getImages() {
+        return images;
     }
 
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
+    public void addImage(EbayItemImage image) {
+        this.images.add(image);
     }
 
     public String getUrl() {

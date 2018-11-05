@@ -1,5 +1,6 @@
 package ebayapi.services;
 
+import ebayapi.models.EbayItemImage;
 import ebayapi.models.EbaySearchItem;
 import ebayapi.models.EbaySearchResult;
 import ebayapi.utils.EbayItemCondition;
@@ -108,13 +109,17 @@ public class EbaySearchParser {
 
         Element imageSrcElement = e.select("img[src*=thumbs]").first();
         Element imageUrlElement = e.select("img[imgurl*=thumbs]").first();
-        String imgUrl = "";
         if (imageSrcElement != null) {
-            imgUrl = imageSrcElement.attr("src").replace("/thumbs/", "/").replace("s-l225", "s-l1600");
+            Matcher matcher = Pattern.compile("/((g|m)/(.*))/").matcher(imageSrcElement.attr("src"));
+            if (matcher.find()) {
+                item.addImage(new EbayItemImage(matcher.group(1)));
+            }
         } else if (imageUrlElement != null) {
-            imgUrl = imageUrlElement.attr("imgurl").replace("/thumbs/", "/").replace("s-l225", "s-l1600");
+            Matcher matcher = Pattern.compile("/((g|m)/(.*))/").matcher(imageUrlElement.attr("imgurl"));
+            if (matcher.find()) {
+                item.addImage(new EbayItemImage(matcher.group(1)));
+            }
         }
-        item.setImgUrl(imgUrl);
 
         return item;
     }

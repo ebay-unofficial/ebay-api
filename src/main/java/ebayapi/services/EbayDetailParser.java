@@ -1,6 +1,7 @@
 package ebayapi.services;
 
 import ebayapi.models.EbayDetailItem;
+import ebayapi.models.EbayItemImage;
 import ebayapi.models.EbaySeller;
 import ebayapi.utils.EbayAuctionType;
 import ebayapi.utils.EbayItemCondition;
@@ -56,11 +57,12 @@ public class EbayDetailParser {
         });
 
         Element icImg = document.getElementById("icImg");
-        String imgUrl = "";
         if (icImg != null) {
-            imgUrl = icImg.attr("src").replace("s-l300", "s-l1600");
+            Matcher matcher = Pattern.compile("/((g|m)/(.*))/").matcher(icImg.attr("src"));
+            if (matcher.find()) {
+                item.addImage(new EbayItemImage(matcher.group(1)));
+            }
         }
-        item.setImgUrl(imgUrl);
 
         return item;
     }
