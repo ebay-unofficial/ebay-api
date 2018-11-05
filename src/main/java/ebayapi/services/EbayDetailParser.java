@@ -6,6 +6,7 @@ import ebayapi.utils.EbayAuctionType;
 import ebayapi.utils.EbayItemCondition;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +54,13 @@ public class EbayDetailParser {
             element.children().remove();
             item.addPaymentMethod(element.text());
         });
+
+        Element icImg = document.getElementById("icImg");
+        String imgUrl = "";
+        if (icImg != null) {
+            imgUrl = icImg.attr("src").replace("s-l300", "s-l1600");
+        }
+        item.setImgUrl(imgUrl);
 
         return item;
     }
