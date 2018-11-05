@@ -108,13 +108,13 @@ public class EbaySearchParser {
 
         Element imageSrcElement = e.select("img[src*=thumbs]").first();
         Element imageUrlElement = e.select("img[imgurl*=thumbs]").first();
-        String src = "";
+        String imgUrl = "";
         if (imageSrcElement != null) {
-            src = imageSrcElement.attr("src").replace("/thumbs/", "/").replace("s-l225", "s-l1600");
+            imgUrl = imageSrcElement.attr("src").replace("/thumbs/", "/").replace("s-l225", "s-l1600");
         } else if (imageUrlElement != null) {
-            src = imageUrlElement.attr("imgurl").replace("/thumbs/", "/").replace("s-l225", "s-l1600");
+            imgUrl = imageUrlElement.attr("imgurl").replace("/thumbs/", "/").replace("s-l225", "s-l1600");
         }
-        item.setImgSrc(src);
+        item.setImgUrl(imgUrl);
 
         return item;
     }

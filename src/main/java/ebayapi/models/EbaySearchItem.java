@@ -22,9 +22,7 @@ public class EbaySearchItem {
 
     protected boolean suggestPrice;
 
-    protected String url;
-
-    protected String imgSrc;
+    protected String imgUrl;
 
     public String getId() {
         return id;
@@ -102,12 +100,12 @@ public class EbaySearchItem {
         this.currency = currency;
     }
 
-    public String getImgSrc() {
-        return imgSrc;
+    public String getImgUrl() {
+        return imgUrl;
     }
 
-    public void setImgSrc(String imgSrc) {
-        this.imgSrc = imgSrc;
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 
     public String getUrl() {
