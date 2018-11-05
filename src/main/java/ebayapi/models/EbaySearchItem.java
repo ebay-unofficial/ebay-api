@@ -1,6 +1,5 @@
 package ebayapi.models;
 
-import ebayapi.utils.EbayAuctionType;
 import ebayapi.utils.EbayItemCondition;
 
 public class EbaySearchItem {
@@ -24,6 +23,8 @@ public class EbaySearchItem {
     protected boolean suggestPrice;
 
     protected String url;
+
+    protected String imgSrc;
 
     public String getId() {
         return id;
@@ -99,6 +100,14 @@ public class EbaySearchItem {
 
     public void setCurrency(String currency) {
         this.currency = currency;
+    }
+
+    public String getImgSrc() {
+        return imgSrc;
+    }
+
+    public void setImgSrc(String imgSrc) {
+        this.imgSrc = imgSrc;
     }
 
     public String getUrl() {
