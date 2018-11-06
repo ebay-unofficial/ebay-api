@@ -96,6 +96,7 @@ public class EbaySearchParser {
         EbaySearchItem item = new EbaySearchItem();
 
         item.setId(parseId(element));
+        item.setNewly(isNewly(element));
         item.setTitle(parseTitle(element));
         item.setCondition(parseItemCondition(element));
 
@@ -119,7 +120,9 @@ public class EbaySearchParser {
     }
 
     private String parseTitle(Element element) {
-        return element.select("h3 > a").text();
+        Element titleElement = element.select(".lvtitle > a").first();
+        titleElement.children().remove();
+        return titleElement.text();
     }
 
     private EbayItemCondition parseItemCondition(Element element) {
@@ -202,4 +205,7 @@ public class EbaySearchParser {
         return !element.getElementsByClass("eplus-icon").isEmpty();
     }
 
+    private boolean isNewly(Element element) {
+        return !element.select("span.newly").isEmpty();
+    }
 }

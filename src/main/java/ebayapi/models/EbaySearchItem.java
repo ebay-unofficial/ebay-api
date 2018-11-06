@@ -29,6 +29,8 @@ public class EbaySearchItem {
 
     protected boolean ebayPlus;
 
+    protected boolean newly;
+
     protected List<EbayItemImage> images;
 
     public EbaySearchItem() {
@@ -117,6 +119,14 @@ public class EbaySearchItem {
 
     public void setEbayPlus(boolean ebayPlus) {
         this.ebayPlus = ebayPlus;
+    }
+
+    public boolean isNewly() {
+        return newly;
+    }
+
+    public void setNewly(boolean newly) {
+        this.newly = newly;
     }
 
     public String getCurrency() {

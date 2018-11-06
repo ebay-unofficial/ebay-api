@@ -1,5 +1,7 @@
 package ebayapi.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,5 +35,11 @@ public class EbayDetailItem extends EbaySearchItem {
         if (!paymentMethod.isEmpty()) {
             this.paymentMethods.add(paymentMethod);
         }
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isNewly() {
+        return super.isNewly();
     }
 }
