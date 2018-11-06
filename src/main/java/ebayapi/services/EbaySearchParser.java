@@ -12,6 +12,7 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -34,14 +35,17 @@ public class EbaySearchParser {
     public EbaySearchResult getSearch(String html) {
         EbaySearchResult result = new EbaySearchResult();
 
+        Document document = Jsoup.parse(html);
+
         result.setUrl(httpService.getLastRequest());
-        result.setItems(parseSearchItems(Jsoup.parse(html)));
-        result.setAds(parseSearchAds(Jsoup.parse(html)));
+        result.setItems(parseSearchItems(document));
+        result.setAds(parseSearchAds(document));
+        result.setTotal(parseTotalCount(document));
 
         return result;
     }
 
-    private List<EbaySearchItem> parseSearchItems(Document html) {
+    private List<EbaySearchItem> parseSearchItems(Element html) {
         ArrayList<EbaySearchItem> items = new ArrayList<>();
 
         Elements elements = html.getElementById("ListViewInner").select("li[listingid]");
@@ -55,7 +59,7 @@ public class EbaySearchParser {
         return items;
     }
 
-    private List<EbaySearchItem> parseSearchAds(Document html) {
+    private List<EbaySearchItem> parseSearchAds(Element html) {
         ArrayList<EbaySearchItem> items = new ArrayList<>();
 
         final boolean[] skipFirst = { true };
@@ -68,6 +72,10 @@ public class EbaySearchParser {
         });
 
         return items;
+    }
+
+    private int parseTotalCount(Element element) {
+        return Integer.valueOf(element.select(".rsHdr .rcnt").first().text().replace(".", ""));
     }
 
     private EbaySearchItem parseListItem(Element element) {
