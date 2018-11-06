@@ -8,6 +8,7 @@ import ebayapi.utils.EbaySearchRequest;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +36,7 @@ public class EbaySearchParser {
 
         result.setUrl(httpService.getLastRequest());
         result.setItems(parseSearchItems(Jsoup.parse(html)));
+        result.setAds(parseSearchAds(Jsoup.parse(html)));
 
         return result;
     }
@@ -42,7 +44,28 @@ public class EbaySearchParser {
     private List<EbaySearchItem> parseSearchItems(Document html) {
         ArrayList<EbaySearchItem> items = new ArrayList<>();
 
-        html.getElementById("ListViewInner").select("li[listingid]").forEach(e -> items.add(parseListItem(e)));
+        Elements elements = html.getElementById("ListViewInner").select("li[listingid]");
+        items.add(parseListItem(elements.first()));
+        elements.forEach(element -> {
+            if (!element.attr("r").equals("1")) {
+                items.add(parseListItem(element));
+            }
+        });
+
+        return items;
+    }
+
+    private List<EbaySearchItem> parseSearchAds(Document html) {
+        ArrayList<EbaySearchItem> items = new ArrayList<>();
+
+        final boolean[] skipFirst = { true };
+        html.getElementById("ListViewInner").select("li[r=1]").forEach(element -> {
+            if (skipFirst[0]) {
+                skipFirst[0] = false;
+            } else {
+                items.add(parseListItem(element));
+            }
+        });
 
         return items;
     }

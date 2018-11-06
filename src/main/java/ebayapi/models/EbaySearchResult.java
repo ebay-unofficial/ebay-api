@@ -11,6 +11,8 @@ public class EbaySearchResult {
 
     private List<EbaySearchItem> items = new ArrayList<>();
 
+    private List<EbaySearchItem> ads = new ArrayList<>();
+
     public EbaySearchResult() { this(""); }
 
     public EbaySearchResult(String id) {
@@ -31,6 +33,14 @@ public class EbaySearchResult {
 
     public void setItems(List<EbaySearchItem> items) {
         this.items = items;
+    }
+
+    public List<EbaySearchItem> getAds() {
+        return ads;
+    }
+
+    public void setAds(List<EbaySearchItem> ads) {
+        this.ads = ads;
     }
 
     public String getUrl() {
