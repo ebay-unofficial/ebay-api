@@ -111,6 +111,10 @@ public class EbaySearchItem {
         return images;
     }
 
+    public void setImages(List<EbayItemImage> images) {
+        this.images = images;
+    }
+
     public void addImage(EbayItemImage image) {
         if (!this.images.contains(image)) {
             this.images.add(image);

@@ -8,7 +8,6 @@ import ebayapi.utils.EbaySearchRequest;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +21,8 @@ public class EbaySearchParser {
 
     private static final String DECIMAL_PATTERN = "(\\d+([.,]\\d+)?)";
 
+    private static final String IMAGE_PATTERN = "/((\\w)/(.*))/";
+
     @Autowired
     EbayHttpService httpService;
 
@@ -30,105 +31,120 @@ public class EbaySearchParser {
     }
 
     public EbaySearchResult getSearch(String html) {
-        Document parsedHtml = parse(html);
-        List<EbaySearchItem> searchItems = getSearchItems(parsedHtml);
         EbaySearchResult result = new EbaySearchResult();
+
         result.setUrl(httpService.getLastRequest());
-        result.setItems(searchItems);
+        result.setItems(parseSearchItems(Jsoup.parse(html)));
+
         return result;
     }
 
-    private List<EbaySearchItem> getSearchItems(Document html) {
+    private List<EbaySearchItem> parseSearchItems(Document html) {
         ArrayList<EbaySearchItem> items = new ArrayList<>();
-        Element listViewInner = html.getElementById("ListViewInner");
-        Elements children = listViewInner.select("li[listingid]");
-        children.forEach(e -> {
-            EbaySearchItem item = getListItem(e);
-            items.add(item);
-        });
+
+        html.getElementById("ListViewInner").select("li[listingid]").forEach(e -> items.add(parseListItem(e)));
+
         return items;
     }
 
-    private EbaySearchItem getListItem(Element e) {
+    private EbaySearchItem parseListItem(Element element) {
         EbaySearchItem item = new EbaySearchItem();
 
-        Elements iid = e.getElementsByAttribute("iid");
-        String itemId = iid.attr("iid");
-        item.setId(itemId);
+        item.setId(parseId(element));
+        item.setTitle(parseTitle(element));
+        item.setCondition(parseItemCondition(element));
 
-        Elements titleElement = e.select("h3 > a");
-        String title = titleElement.text();
-        item.setTitle(title);
+        item.setAuction(isAuction(element));
+        item.setBuyNow(isBuyNow(element));
+        item.setSuggestPrice(isSuggestPrice(element));
 
-        String format = e.getElementsByClass("lvformat").text();
-        if (format.toLowerCase().contains("gebot")) {
-            item.setAuction(true);
-        }
-        if (format.toLowerCase().contains("sofort-kauf") || format.toLowerCase().contains("preisvorschlag")) {
-            item.setBuyNow(true);
-        }
-        if (format.toLowerCase().contains("preisvorschlag")) {
-            item.setSuggestPrice(true);
-        }
+        item.setPrice(parsePrice(element));
+        item.setShipping(parseShipping(element));
+        item.setCurrency(parseCurrency(element));
 
-        Element lvsubtitle = e.getElementsByClass("lvsubtitle").last();
-        String conditionText;
-        if (lvsubtitle != null) {
-            conditionText = lvsubtitle.text();
-        } else {
-            conditionText = "";
-        }
-        EbayItemCondition itemCondition = EbayItemCondition.UNKNOWN;
-        for (EbayItemCondition condition : EbayItemCondition.values()) {
-            if (conditionText.toLowerCase().contains(condition.name.toLowerCase())) {
-                itemCondition = condition;
-                break;
-            }
-        }
-        item.setCondition(itemCondition);
-
-        String priceText = e.getElementsByClass("lvprice").text();
-        Matcher priceMatcher = Pattern.compile(DECIMAL_PATTERN).matcher(priceText);
-        if (priceMatcher.find()) {
-            String rawNumber = priceMatcher.group(1).replace(",", ".");
-            double price = Double.parseDouble(rawNumber);
-            item.setPrice(price);
-        }
-
-        String feeText = e.getElementsByClass("fee").text();
-        Matcher feeMatcher = Pattern.compile(DECIMAL_PATTERN).matcher(feeText);
-        if (feeMatcher.find()) {
-            String rawNumber = feeMatcher.group(1).replace(",", ".");
-            double fee = Double.parseDouble(rawNumber);
-            item.setShipping(fee);
-        }
-
-        Element currencyElement = e.select("li.lvprice > span b").first();
-        String currency = currencyElement.text();
-        item.setCurrency(currency);
-
-        Element imageSrcElement = e.select("img[src*=thumbs]").first();
-        Element imageUrlElement = e.select("img[imgurl*=thumbs]").first();
-        if (imageSrcElement != null) {
-            Matcher matcher = Pattern.compile("/((\\w)/(.*))/").matcher(imageSrcElement.attr("src"));
-            if (matcher.find()) {
-                EbayItemImage ebayItemImage = new EbayItemImage(matcher.group(3));
-                ebayItemImage.setType(matcher.group(2));
-                item.addImage(ebayItemImage);
-            }
-        } else if (imageUrlElement != null) {
-            Matcher matcher = Pattern.compile("/((\\w)/(.*))/").matcher(imageUrlElement.attr("imgurl"));
-            if (matcher.find()) {
-                EbayItemImage ebayItemImage = new EbayItemImage(matcher.group(3));
-                ebayItemImage.setType(matcher.group(2));
-                item.addImage(ebayItemImage);
-            }
-        }
+        item.setImages(parseImages(element));
 
         return item;
     }
 
-    private Document parse(String html) {
-        return Jsoup.parse(html);
+    private String parseId(Element element) {
+        return element.getElementsByAttribute("iid").attr("iid");
     }
+
+    private String parseTitle(Element element) {
+        return element.select("h3 > a").text();
+    }
+
+    private EbayItemCondition parseItemCondition(Element element) {
+        Element lvsubtitle = element.getElementsByClass("lvsubtitle").last();
+        String conditionText = lvsubtitle != null ? lvsubtitle.text().toLowerCase() : "";
+
+        for (EbayItemCondition itemCondition : EbayItemCondition.values()) {
+            if (conditionText.contains(itemCondition.name.toLowerCase())) {
+                return itemCondition;
+            }
+        }
+        return EbayItemCondition.UNKNOWN;
+    }
+
+    private double parsePrice(Element element) {
+        Matcher matcher = Pattern.compile(DECIMAL_PATTERN).matcher(element.getElementsByClass("lvprice").text());
+        if (matcher.find()) {
+            return Double.parseDouble(matcher.group(1).replace(",", "."));
+        }
+        return -1;
+    }
+
+    private double parseShipping(Element element) {
+        Matcher matcher = Pattern.compile(DECIMAL_PATTERN).matcher(element.getElementsByClass("fee").text());
+        if (matcher.find()) {
+            return Double.parseDouble(matcher.group(1).replace(",", "."));
+        }
+        return 0;
+    }
+
+    private String parseCurrency(Element element) {
+        return element.select("li.lvprice > span b").first().text();
+    }
+
+    private List<EbayItemImage> parseImages(Element element) {
+        List<EbayItemImage> images = new ArrayList<>();
+
+        Element imageSrcElement = element.select("img[src*=thumbs]").first();
+        Element imageUrlElement = element.select("img[imgurl*=thumbs]").first();
+        if (imageSrcElement != null) {
+            images.add(parseImage(imageSrcElement));
+        } else if (imageUrlElement != null) {
+            images.add(parseImage(imageUrlElement));
+        }
+
+        return images;
+    }
+
+    private EbayItemImage parseImage(Element element) {
+        String url = element.attr("imgurl").equals("") ? element.attr("src") : element.attr("imgurl");
+        Matcher matcher = Pattern.compile(IMAGE_PATTERN).matcher(url);
+        if (matcher.find()) {
+            EbayItemImage ebayItemImage = new EbayItemImage(matcher.group(3));
+            ebayItemImage.setType(matcher.group(2));
+            return ebayItemImage;
+        }
+        return null;
+    }
+
+    private boolean isAuction(Element element) {
+        String format = element.getElementsByClass("lvformat").text().toLowerCase();
+        return format.contains("gebot");
+    }
+
+    private boolean isBuyNow(Element element) {
+        String format = element.getElementsByClass("lvformat").text().toLowerCase();
+        return format.contains("sofort-kauf") || format.contains("preisvorschlag");
+    }
+
+    private boolean isSuggestPrice(Element element) {
+        String format = element.getElementsByClass("lvformat").text().toLowerCase();
+        return format.contains("preisvorschlag");
+    }
+
 }
