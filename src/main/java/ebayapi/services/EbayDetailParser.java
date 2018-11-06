@@ -48,9 +48,6 @@ public class EbayDetailParser {
         item.setBuyNow(isBuyNow(document));
 
         item.setPaymentMethods(parsePaymentMethods(document));
-        if (isPayPal(document)) {
-            item.addPaymentMethod("Pay-Pal");
-        }
 
         item.setImages(parseImages(document));
 
@@ -96,14 +93,17 @@ public class EbayDetailParser {
         return m.find() ? Double.parseDouble(m.group(1).replace(',', '.')) : 0;
     }
 
-    private List<String> parsePaymentMethods(Element element1) {
+    private List<String> parsePaymentMethods(Element element) {
         List<String> paymentMethods = new ArrayList<>();
-        element1.getElementsByClass("hideGspPymt").forEach(element -> {
-            element.children().remove();
-            if (!element.text().equals("")) {
-                paymentMethods.add(element.text());
+        element.getElementsByClass("hideGspPymt").forEach(payment -> {
+            payment.children().remove();
+            if (!payment.text().equals("")) {
+                paymentMethods.add(payment.text());
             }
         });
+        if (isPayPal(element)) {
+            paymentMethods.add("Pay-Pal");
+        }
         return paymentMethods;
     }
 
@@ -122,7 +122,7 @@ public class EbayDetailParser {
     }
 
     private boolean isPayPal(Element element) {
-        return element.getElementsByClass("pd-img") != null;
+        return !element.getElementsByClass("pd-img").isEmpty();
     }
 
     private boolean isAuction(Element element) {
