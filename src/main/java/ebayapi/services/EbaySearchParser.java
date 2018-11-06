@@ -42,6 +42,7 @@ public class EbaySearchParser {
         result.setItems(parseSearchItems(document));
         result.setAds(parseSearchAds(document));
         result.setTotal(parseTotalCount(document));
+        result.setZip(parseZip(document));
         result.setConditionCount(parseConditionCount(document));
 
         return result;
@@ -90,6 +91,10 @@ public class EbaySearchParser {
         });
 
         return conditionCounts;
+    }
+
+    private String parseZip(Element element) {
+        return element.select("a[aria-describedby=loczip]").text();
     }
 
     private EbaySearchItem parseListItem(Element element) {

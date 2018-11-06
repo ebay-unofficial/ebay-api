@@ -67,6 +67,13 @@ public class EbaySearchRequest {
         return this;
     }
 
+    public EbaySearchRequest withZip(String zip) {
+        if (!zip.isEmpty()) {
+            params += "&_stpos=" + zip + "&_localstpos=" + zip;
+        }
+        return this;
+    }
+
     public EbaySearchRequest limit(int limit) {
         params += "&_ipg=" + limit;
         return this;

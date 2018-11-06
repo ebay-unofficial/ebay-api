@@ -17,6 +17,8 @@ public class EbaySearchResult {
 
     private List<EbaySearchItem> ads = new ArrayList<>();
 
+    private String zip;
+
     private int total;
 
     Map<EbayItemCondition, Integer> conditionCount = new HashMap<>();
@@ -73,6 +75,14 @@ public class EbaySearchResult {
 
     public void setConditionCount(Map<EbayItemCondition, Integer> conditionCount) {
         this.conditionCount = conditionCount;
+    }
+
+    public String getZip() {
+        return zip;
+    }
+
+    public void setZip(String zip) {
+        this.zip = zip;
     }
 
     public int getSize() {
