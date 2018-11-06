@@ -57,6 +57,7 @@ public class EbaySearchParser {
         item.setAuction(isAuction(element));
         item.setBuyNow(isBuyNow(element));
         item.setSuggestPrice(isSuggestPrice(element));
+        item.setPriceRange(isPriceRange(element));
 
         item.setPrice(parsePrice(element));
         item.setShipping(parseShipping(element));
@@ -145,6 +146,10 @@ public class EbaySearchParser {
     private boolean isSuggestPrice(Element element) {
         String format = element.getElementsByClass("lvformat").text().toLowerCase();
         return format.contains("preisvorschlag");
+    }
+
+    private boolean isPriceRange(Element element) {
+        return parseImages(element).get(0).getType().equals("m");
     }
 
 }

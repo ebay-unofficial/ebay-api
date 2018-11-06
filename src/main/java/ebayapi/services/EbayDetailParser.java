@@ -37,62 +37,67 @@ public class EbayDetailParser {
         item.setSeller(parseSeller(document));
         item.setTitle(parseTitle(document));
         item.setCondition(parseCondition(document));
-        item.setCurrency(parseCurrency(document));
+
+        item.setPrice(parsePrice(document));
         item.setShipping(parseShipping(document));
+        item.setCurrency(parseCurrency(document));
+        item.setPriceRange(isPriceRange(document));
+
         item.setAuction(isAuction(document));
         item.setBuyNow(isBuyNow(document));
-        item.setPrice(parsePrice(document));
+
         item.setPaymentMethods(parsePaymentMethods(document));
         if (isPayPal(document)) {
             item.addPaymentMethod("Pay-Pal");
         }
+
         item.setImages(parseImages(document));
 
         return item;
     }
 
-    private EbaySeller parseSeller(Document document) {
+    private EbaySeller parseSeller(Element element) {
         EbaySeller seller = new EbaySeller();
 
-        seller.setName(document.getElementsByClass("mbg-nw").first().text());
-        String feedback = document.getElementById("si-fb").text();
+        seller.setName(element.getElementsByClass("mbg-nw").first().text());
+        String feedback = element.getElementById("si-fb").text();
         Matcher m = Pattern.compile(DECIMAL_PATTERN).matcher(feedback);
         seller.setFeedback(m.find() ? Double.parseDouble(m.group(1).replace(',', '.')) : -1);
-        seller.setStars(Integer.valueOf(document.getElementsByClass("mbg-l").first().child(0).text()));
+        seller.setStars(Integer.valueOf(element.getElementsByClass("mbg-l").first().child(0).text()));
 
         return seller;
     }
 
-    private String parseTitle(Document document) {
-        document.getElementById("itemTitle").children().remove();
-        return document.getElementById("itemTitle").text();
+    private String parseTitle(Element element) {
+        element.getElementById("itemTitle").children().remove();
+        return element.getElementById("itemTitle").text();
     }
 
-    private EbayItemCondition parseCondition(Document document) {
-        return EbayItemCondition.parse(document.getElementById("vi-itm-cond").text());
+    private EbayItemCondition parseCondition(Element element) {
+        return EbayItemCondition.parse(element.getElementById("vi-itm-cond").text());
     }
 
-    private String parseCurrency(Document document) {
-        return document.getElementsByAttributeValue("itemprop", "priceCurrency").first().attr("content");
+    private String parseCurrency(Element element) {
+        return element.getElementsByAttributeValue("itemprop", "priceCurrency").first().attr("content");
     }
 
-    private double parsePrice(Document document) {
-        if (isBuyNow(document)) {
-            return Double.parseDouble(document.getElementById("prcIsum").attr("content"));
-        } else if (isAuction(document)){
-            return Double.parseDouble(document.getElementById("prcIsum_bidPrice").attr("content"));
+    private double parsePrice(Element element) {
+        if (isBuyNow(element)) {
+            return Double.parseDouble(element.getElementById("prcIsum").attr("content"));
+        } else if (isAuction(element)){
+            return Double.parseDouble(element.getElementById("prcIsum_bidPrice").attr("content"));
         }
         return -1;
     }
 
-    private double parseShipping(Document document) {
-        Matcher m = Pattern.compile(DECIMAL_PATTERN).matcher(document.getElementById("fshippingCost").text());
+    private double parseShipping(Element element) {
+        Matcher m = Pattern.compile(DECIMAL_PATTERN).matcher(element.getElementById("fshippingCost").text());
         return m.find() ? Double.parseDouble(m.group(1).replace(',', '.')) : 0;
     }
 
-    private List<String> parsePaymentMethods(Document document) {
+    private List<String> parsePaymentMethods(Element element1) {
         List<String> paymentMethods = new ArrayList<>();
-        document.getElementsByClass("hideGspPymt").forEach(element -> {
+        element1.getElementsByClass("hideGspPymt").forEach(element -> {
             element.children().remove();
             if (!element.text().equals("")) {
                 paymentMethods.add(element.text());
@@ -101,9 +106,9 @@ public class EbayDetailParser {
         return paymentMethods;
     }
 
-    private List<EbayItemImage> parseImages(Document document) {
+    private List<EbayItemImage> parseImages(Element element) {
         List<EbayItemImage> images = new ArrayList<>();
-        Element jsdf = document.select("#JSDF").first();
+        Element jsdf = element.select("#JSDF").first();
         Matcher matcher = Pattern.compile(IMAGE_PATTERN).matcher(jsdf.html());
         while (matcher.find()) {
             EbayItemImage ebayItemImage = new EbayItemImage(matcher.group(3));
@@ -115,16 +120,20 @@ public class EbayDetailParser {
         return images;
     }
 
-    private boolean isPayPal(Document document) {
-        return document.getElementsByClass("pd-img") != null;
+    private boolean isPayPal(Element element) {
+        return element.getElementsByClass("pd-img") != null;
     }
 
-    private boolean isAuction(Document document) {
-        return document.getElementById("prcIsum_bidPrice") != null;
+    private boolean isAuction(Element element) {
+        return element.getElementById("prcIsum_bidPrice") != null;
     }
 
-    private boolean isBuyNow(Document document) {
-        return document.getElementById("prcIsum") != null;
+    private boolean isBuyNow(Element element) {
+        return element.getElementById("prcIsum") != null;
+    }
+
+    private boolean isPriceRange(Element element) {
+        return element.getElementById("msku-sel-1") != null;
     }
 
 }

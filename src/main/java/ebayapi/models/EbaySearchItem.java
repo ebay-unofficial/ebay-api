@@ -25,6 +25,8 @@ public class EbaySearchItem {
 
     protected boolean suggestPrice;
 
+    protected boolean priceRange;
+
     protected List<EbayItemImage> images;
 
     public EbaySearchItem() {
@@ -97,6 +99,14 @@ public class EbaySearchItem {
 
     public void setSuggestPrice(boolean suggestPrice) {
         this.suggestPrice = suggestPrice;
+    }
+
+    public boolean isPriceRange() {
+        return priceRange;
+    }
+
+    public void setPriceRange(boolean priceRange) {
+        this.priceRange = priceRange;
     }
 
     public String getCurrency() {
