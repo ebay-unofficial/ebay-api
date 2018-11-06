@@ -110,14 +110,18 @@ public class EbaySearchParser {
         Element imageSrcElement = e.select("img[src*=thumbs]").first();
         Element imageUrlElement = e.select("img[imgurl*=thumbs]").first();
         if (imageSrcElement != null) {
-            Matcher matcher = Pattern.compile("/((g|m)/(.*))/").matcher(imageSrcElement.attr("src"));
+            Matcher matcher = Pattern.compile("/((\\w)/(.*))/").matcher(imageSrcElement.attr("src"));
             if (matcher.find()) {
-                item.addImage(new EbayItemImage(matcher.group(1)));
+                EbayItemImage ebayItemImage = new EbayItemImage(matcher.group(3));
+                ebayItemImage.setType(matcher.group(2));
+                item.addImage(ebayItemImage);
             }
         } else if (imageUrlElement != null) {
-            Matcher matcher = Pattern.compile("/((g|m)/(.*))/").matcher(imageUrlElement.attr("imgurl"));
+            Matcher matcher = Pattern.compile("/((\\w)/(.*))/").matcher(imageUrlElement.attr("imgurl"));
             if (matcher.find()) {
-                item.addImage(new EbayItemImage(matcher.group(1)));
+                EbayItemImage ebayItemImage = new EbayItemImage(matcher.group(3));
+                ebayItemImage.setType(matcher.group(2));
+                item.addImage(ebayItemImage);
             }
         }
 

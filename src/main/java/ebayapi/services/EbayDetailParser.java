@@ -8,6 +8,7 @@ import ebayapi.utils.EbayItemCondition;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,11 +57,16 @@ public class EbayDetailParser {
             item.addPaymentMethod(element.text());
         });
 
-        Element icImg = document.getElementById("icImg");
-        if (icImg != null) {
-            Matcher matcher = Pattern.compile("/((g|m)/(.*))/").matcher(icImg.attr("src"));
-            if (matcher.find()) {
-                item.addImage(new EbayItemImage(matcher.group(1)));
+        Element jsdf = document.select("#JSDF").first();
+        if (jsdf != null) {
+            String imagePattern = "maxImageUrl.*?\\\\u002F((\\w)\\\\u002F(.*?))\\\\u002F.*?Height.*?(\\d+).*?Width.*?(\\d+)";
+            Matcher matcher = Pattern.compile(imagePattern).matcher(jsdf.html());
+            while (matcher.find()) {
+                EbayItemImage ebayItemImage = new EbayItemImage(matcher.group(3));
+                ebayItemImage.setType(matcher.group(2));
+                ebayItemImage.setHeight(Integer.valueOf(matcher.group(4)));
+                ebayItemImage.setWidth(Integer.valueOf(matcher.group(5)));
+                item.addImage(ebayItemImage);
             }
         }
 

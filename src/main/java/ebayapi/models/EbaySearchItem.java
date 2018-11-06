@@ -112,7 +112,9 @@ public class EbaySearchItem {
     }
 
     public void addImage(EbayItemImage image) {
-        this.images.add(image);
+        if (!this.images.contains(image)) {
+            this.images.add(image);
+        }
     }
 
     public String getUrl() {
