@@ -58,6 +58,7 @@ public class EbaySearchParser {
         item.setBuyNow(isBuyNow(element));
         item.setSuggestPrice(isSuggestPrice(element));
         item.setPriceRange(isPriceRange(element));
+        item.setEbayPlus(isEbayPlus(element));
 
         item.setPrice(parsePrice(element));
         item.setShipping(parseShipping(element));
@@ -150,6 +151,10 @@ public class EbaySearchParser {
 
     private boolean isPriceRange(Element element) {
         return parseImages(element).get(0).getType().equals("m");
+    }
+
+    private boolean isEbayPlus(Element element) {
+        return !element.getElementsByClass("eplus-icon").isEmpty();
     }
 
 }

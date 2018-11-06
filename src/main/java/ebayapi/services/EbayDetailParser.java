@@ -42,6 +42,7 @@ public class EbayDetailParser {
         item.setShipping(parseShipping(document));
         item.setCurrency(parseCurrency(document));
         item.setPriceRange(isPriceRange(document));
+        item.setEbayPlus(isEbayPlus(document));
 
         item.setAuction(isAuction(document));
         item.setBuyNow(isBuyNow(document));
@@ -134,6 +135,10 @@ public class EbayDetailParser {
 
     private boolean isPriceRange(Element element) {
         return element.getElementById("msku-sel-1") != null;
+    }
+
+    private boolean isEbayPlus(Element element) {
+        return !element.getElementsByClass("sh-eplus-img").isEmpty();
     }
 
 }

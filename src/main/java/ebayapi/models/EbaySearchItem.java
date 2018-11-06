@@ -27,6 +27,8 @@ public class EbaySearchItem {
 
     protected boolean priceRange;
 
+    protected boolean ebayPlus;
+
     protected List<EbayItemImage> images;
 
     public EbaySearchItem() {
@@ -107,6 +109,14 @@ public class EbaySearchItem {
 
     public void setPriceRange(boolean priceRange) {
         this.priceRange = priceRange;
+    }
+
+    public boolean isEbayPlus() {
+        return ebayPlus;
+    }
+
+    public void setEbayPlus(boolean ebayPlus) {
+        this.ebayPlus = ebayPlus;
     }
 
     public String getCurrency() {
