@@ -12,9 +12,10 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.print.Doc;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,6 +42,7 @@ public class EbaySearchParser {
         result.setItems(parseSearchItems(document));
         result.setAds(parseSearchAds(document));
         result.setTotal(parseTotalCount(document));
+        result.setConditionCount(parseConditionCount(document));
 
         return result;
     }
@@ -62,7 +64,7 @@ public class EbaySearchParser {
     private List<EbaySearchItem> parseSearchAds(Element html) {
         ArrayList<EbaySearchItem> items = new ArrayList<>();
 
-        final boolean[] skipFirst = { true };
+        final boolean[] skipFirst = {true};
         html.getElementById("ListViewInner").select("li[r=1]").forEach(element -> {
             if (skipFirst[0]) {
                 skipFirst[0] = false;
@@ -76,6 +78,18 @@ public class EbaySearchParser {
 
     private int parseTotalCount(Element element) {
         return Integer.valueOf(element.select(".rsHdr .rcnt").first().text().replace(".", ""));
+    }
+
+    private Map<EbayItemCondition, Integer> parseConditionCount(Element element) {
+        Map<EbayItemCondition, Integer> conditionCounts = new HashMap<>();
+
+        element.select("input[name=LH_ItemCondition]").forEach(conditionInput -> {
+            Element conditionElement = conditionInput.nextElementSibling();
+            Element conditionValue = conditionElement.nextElementSibling();
+            conditionCounts.put(EbayItemCondition.parse(conditionElement.text()), Integer.valueOf(conditionValue.text().replaceAll("[.,()]", "")));
+        });
+
+        return conditionCounts;
     }
 
     private EbaySearchItem parseListItem(Element element) {

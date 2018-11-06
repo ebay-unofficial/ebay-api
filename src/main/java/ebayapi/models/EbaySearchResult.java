@@ -1,7 +1,11 @@
 package ebayapi.models;
 
+import ebayapi.utils.EbayItemCondition;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EbaySearchResult {
 
@@ -14,6 +18,8 @@ public class EbaySearchResult {
     private List<EbaySearchItem> ads = new ArrayList<>();
 
     private int total;
+
+    Map<EbayItemCondition, Integer> conditionCount = new HashMap<>();
 
     public EbaySearchResult() { this(""); }
 
@@ -59,6 +65,14 @@ public class EbaySearchResult {
 
     public void setTotal(int total) {
         this.total = total;
+    }
+
+    public Map<EbayItemCondition, Integer> getConditionCount() {
+        return conditionCount;
+    }
+
+    public void setConditionCount(Map<EbayItemCondition, Integer> conditionCount) {
+        this.conditionCount = conditionCount;
     }
 
     public int getSize() {
