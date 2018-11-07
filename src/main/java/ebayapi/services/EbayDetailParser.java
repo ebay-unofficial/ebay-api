@@ -29,6 +29,10 @@ public class EbayDetailParser {
     private static final String IMAGE_PATTERN = "maxImageUrl.*?\\\\u002F((\\w)\\\\u002F(.*?))\\\\u002F" +
             ".*?Height.*?(\\d+).*?Width.*?(\\d+)";
 
+    private static final String SOLD_PATTERN = "((\\d+[.,])*\\d+)\\sverkauft";
+
+    private static final String CLICKS_PER_HOUR_PATTERN = "((\\d+[.,])*\\d+)\\sMal\\spro\\sStunde";
+
     public EbayDetailItem parseDetailItem(String id) {
         Document document = Jsoup.parse(httpService.httpGet("/itm/" + id + "?orig_cvip=true"));
 
@@ -49,6 +53,7 @@ public class EbayDetailParser {
 
         item.setPaymentMethods(parsePaymentMethods(document));
         item.setSold(parseSold(document));
+        item.setClicksPerHour(parseClicksPerHour(document));
 
         item.setImages(parseImages(document));
 
@@ -128,9 +133,22 @@ public class EbayDetailParser {
 
     private int parseSold(Element element) {
         Element why2buyElement = element.getElementById("why2buy");
-        Matcher matcher = Pattern.compile("((\\d+[.,])*\\d+)\\sverkauft").matcher(why2buyElement.text());
-        if (matcher.find()) {
-            return Integer.valueOf(matcher.group(1).replaceAll("[.,]", ""));
+        if (why2buyElement != null) {
+            Matcher matcher = Pattern.compile(SOLD_PATTERN).matcher(why2buyElement.text());
+            if (matcher.find()) {
+                return Integer.valueOf(matcher.group(1).replaceAll("[.,]", ""));
+            }
+        }
+        return 0;
+    }
+
+    private int parseClicksPerHour(Element element) {
+        Element notificationElement = element.getElementById("vi_notification_new");
+        if (notificationElement != null) {
+            Matcher matcher = Pattern.compile(CLICKS_PER_HOUR_PATTERN).matcher(notificationElement.text());
+            if (matcher.find()) {
+                return Integer.valueOf(matcher.group(1).replaceAll("[.,]", ""));
+            }
         }
         return 0;
     }

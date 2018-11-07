@@ -13,6 +13,8 @@ public class EbayDetailItem extends EbaySearchItem {
 
     private int sold;
 
+    private int clicksPerHour;
+
     public EbayDetailItem(String id) {
         this.id = id;
         this.paymentMethods = new ArrayList<>();
@@ -46,6 +48,14 @@ public class EbayDetailItem extends EbaySearchItem {
 
     public void setSold(int sold) {
         this.sold = sold;
+    }
+
+    public int getClicksPerHour() {
+        return clicksPerHour;
+    }
+
+    public void setClicksPerHour(int clicksPerHour) {
+        this.clicksPerHour = clicksPerHour;
     }
 
     @Override
