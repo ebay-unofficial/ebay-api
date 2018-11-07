@@ -132,7 +132,9 @@ public class EbayDetailParser {
             ebayItemImage.setType(matcher.group(2));
             ebayItemImage.setHeight(Integer.valueOf(matcher.group(4)));
             ebayItemImage.setWidth(Integer.valueOf(matcher.group(5)));
-            images.add(ebayItemImage);
+            if (!images.contains(ebayItemImage)) {
+                images.add(ebayItemImage);
+            }
         }
         return images;
     }
