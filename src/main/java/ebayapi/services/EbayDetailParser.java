@@ -48,6 +48,7 @@ public class EbayDetailParser {
         item.setBuyNow(isBuyNow(document));
 
         item.setPaymentMethods(parsePaymentMethods(document));
+        item.setSold(parseSold(document));
 
         item.setImages(parseImages(document));
 
@@ -89,8 +90,12 @@ public class EbayDetailParser {
     }
 
     private double parseShipping(Element element) {
-        Matcher m = Pattern.compile(DECIMAL_PATTERN).matcher(element.getElementById("fshippingCost").text());
-        return m.find() ? Double.parseDouble(m.group(1).replace(',', '.')) : 0;
+        Element shippingElement = element.getElementById("fshippingCost");
+        if (shippingElement != null) {
+            Matcher m = Pattern.compile(DECIMAL_PATTERN).matcher(shippingElement.text());
+            return m.find() ? Double.parseDouble(m.group(1).replace(',', '.')) : 0;
+        }
+        return 0;
     }
 
     private List<String> parsePaymentMethods(Element element) {
@@ -119,6 +124,15 @@ public class EbayDetailParser {
             images.add(ebayItemImage);
         }
         return images;
+    }
+
+    private int parseSold(Element element) {
+        Element why2buyElement = element.getElementById("why2buy");
+        Matcher matcher = Pattern.compile("((\\d+[.,])*\\d+)\\sverkauft").matcher(why2buyElement.text());
+        if (matcher.find()) {
+            return Integer.valueOf(matcher.group(1).replaceAll("[.,]", ""));
+        }
+        return 0;
     }
 
     private boolean isPayPal(Element element) {

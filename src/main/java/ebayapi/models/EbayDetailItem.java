@@ -8,7 +8,10 @@ import java.util.List;
 public class EbayDetailItem extends EbaySearchItem {
 
     private EbaySeller seller;
+
     private List<String> paymentMethods;
+
+    private int sold;
 
     public EbayDetailItem(String id) {
         this.id = id;
@@ -35,6 +38,14 @@ public class EbayDetailItem extends EbaySearchItem {
         if (!paymentMethod.isEmpty()) {
             this.paymentMethods.add(paymentMethod);
         }
+    }
+
+    public int getSold() {
+        return sold;
+    }
+
+    public void setSold(int sold) {
+        this.sold = sold;
     }
 
     @Override
