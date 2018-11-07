@@ -57,6 +57,9 @@ public class EbayDetailItem extends EbaySearchItem {
     }
 
     public double getSoldPercentage() {
+        if (soldPercentage == 0) {
+            return Math.round(1000 * (1 - ((double) available / sold))) / 10.0;
+        }
         return soldPercentage;
     }
 

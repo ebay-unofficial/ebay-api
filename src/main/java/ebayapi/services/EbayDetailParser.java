@@ -32,6 +32,8 @@ public class EbayDetailParser {
 
     private static final String AVAILABLE_PATTERN = "((\\d+[.,])*\\d+)\\sverfügbar";
 
+    private static final String AVAILABLE_LAST_PATTERN = "Letzter Artikel";
+
     private static final String CLICKS_PER_HOUR_PATTERN = "((\\d+[.,])*\\d+)\\sMal\\spro\\sStunde";
 
     public EbayDetailItem parseDetailItem(String id) {
@@ -185,6 +187,10 @@ public class EbayDetailParser {
             Matcher matcher = Pattern.compile(AVAILABLE_PATTERN).matcher(availableElement.text());
             if (matcher.find()) {
                 return Integer.valueOf(matcher.group(1).replaceAll("[.,]", ""));
+            }
+            matcher = Pattern.compile(AVAILABLE_LAST_PATTERN).matcher(availableElement.text());
+            if (matcher.find()) {
+                return 1;
             }
         }
         return 0;
