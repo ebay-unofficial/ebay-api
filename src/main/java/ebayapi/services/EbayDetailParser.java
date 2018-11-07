@@ -3,16 +3,13 @@ package ebayapi.services;
 import ebayapi.models.EbayDetailItem;
 import ebayapi.models.EbayItemImage;
 import ebayapi.models.EbaySeller;
-import ebayapi.utils.EbayAuctionType;
 import ebayapi.utils.EbayItemCondition;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -31,6 +28,8 @@ public class EbayDetailParser {
 
     private static final String SOLD_PATTERN = "((\\d+[.,])*\\d+)\\sverkauft";
 
+    private static final String AVAILABLE_PATTERN = "((\\d+[.,])*\\d+)\\sverfügbar";
+
     private static final String CLICKS_PER_HOUR_PATTERN = "((\\d+[.,])*\\d+)\\sMal\\spro\\sStunde";
 
     public EbayDetailItem parseDetailItem(String id) {
@@ -45,14 +44,16 @@ public class EbayDetailParser {
         item.setPrice(parsePrice(document));
         item.setShipping(parseShipping(document));
         item.setCurrency(parseCurrency(document));
-        item.setPriceRange(isPriceRange(document));
-        item.setEbayPlus(isEbayPlus(document));
 
         item.setAuction(isAuction(document));
         item.setBuyNow(isBuyNow(document));
+        item.setPriceRange(isPriceRange(document));
+        item.setEbayPlus(isEbayPlus(document));
 
         item.setPaymentMethods(parsePaymentMethods(document));
         item.setSold(parseSold(document));
+        item.setAvailable(parseAvailable(document));
+        item.setSoldLastDay(parseSoldLastDay(document));
         item.setClicksPerHour(parseClicksPerHour(document));
 
         item.setImages(parseImages(document));
@@ -142,10 +143,32 @@ public class EbayDetailParser {
         return 0;
     }
 
+    private int parseSoldLastDay(Element element) {
+        Element why2buyElement = element.select("a.vi-pop-drkgry").first();
+        if (why2buyElement != null) {
+            Matcher matcher = Pattern.compile(SOLD_PATTERN).matcher(why2buyElement.text());
+            if (matcher.find()) {
+                return Integer.valueOf(matcher.group(1).replaceAll("[.,]", ""));
+            }
+        }
+        return 0;
+    }
+
     private int parseClicksPerHour(Element element) {
         Element notificationElement = element.getElementById("vi_notification_new");
         if (notificationElement != null) {
             Matcher matcher = Pattern.compile(CLICKS_PER_HOUR_PATTERN).matcher(notificationElement.text());
+            if (matcher.find()) {
+                return Integer.valueOf(matcher.group(1).replaceAll("[.,]", ""));
+            }
+        }
+        return 0;
+    }
+
+    private int parseAvailable(Element element) {
+        Element availableElement = element.getElementById("qtySubTxt");
+        if (availableElement != null) {
+            Matcher matcher = Pattern.compile(AVAILABLE_PATTERN).matcher(availableElement.text());
             if (matcher.find()) {
                 return Integer.valueOf(matcher.group(1).replaceAll("[.,]", ""));
             }

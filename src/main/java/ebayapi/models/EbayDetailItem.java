@@ -13,6 +13,10 @@ public class EbayDetailItem extends EbaySearchItem {
 
     private int sold;
 
+    private int soldLastDay;
+
+    private int available;
+
     private int clicksPerHour;
 
     public EbayDetailItem(String id) {
@@ -48,6 +52,22 @@ public class EbayDetailItem extends EbaySearchItem {
 
     public void setSold(int sold) {
         this.sold = sold;
+    }
+
+    public int getSoldLastDay() {
+        return soldLastDay;
+    }
+
+    public void setSoldLastDay(int soldLastDay) {
+        this.soldLastDay = soldLastDay;
+    }
+
+    public int getAvailable() {
+        return available;
+    }
+
+    public void setAvailable(int available) {
+        this.available = available;
     }
 
     public int getClicksPerHour() {
