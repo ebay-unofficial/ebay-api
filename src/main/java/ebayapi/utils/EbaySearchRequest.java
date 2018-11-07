@@ -74,6 +74,11 @@ public class EbaySearchRequest {
         return this;
     }
 
+    public EbaySearchRequest searchInDescription(boolean include) {
+        params += "&LH_TitleDesc=" + (include ? "1" : "0");
+        return this;
+    }
+
     public EbaySearchRequest limit(int limit) {
         params += "&_ipg=" + limit;
         return this;

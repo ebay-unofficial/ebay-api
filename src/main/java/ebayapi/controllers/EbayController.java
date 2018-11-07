@@ -34,6 +34,7 @@ public class EbayController {
             @RequestParam(value = "location", required = false, defaultValue = "") String location,
             @RequestParam(value = "order", required = false, defaultValue = "") String order,
             @RequestParam(value = "zip", required = false, defaultValue = "") String zip,
+            @RequestParam(value = "description", required = false, defaultValue = "false") boolean description,
             @RequestParam(value = "limit", required = false, defaultValue = "25") int limit
     ) {
         return searchParser.getSearch(new EbaySearchRequest(search)
@@ -42,6 +43,7 @@ public class EbayController {
                 .isSold(sold)
                 .preferLocation(location)
                 .withZip(zip)
+                .searchInDescription(description)
                 .orderBy(order)
                 .limit(limit)
         );
