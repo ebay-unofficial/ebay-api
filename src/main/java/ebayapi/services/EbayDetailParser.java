@@ -28,6 +28,8 @@ public class EbayDetailParser {
 
     private static final String SOLD_PATTERN = "((\\d+[.,])*\\d+)\\sverkauft";
 
+    private static final String SOLD_PERCENTAGE_PATTERN = "(\\d+)%\\sverkauft";
+
     private static final String AVAILABLE_PATTERN = "((\\d+[.,])*\\d+)\\sverfügbar";
 
     private static final String CLICKS_PER_HOUR_PATTERN = "((\\d+[.,])*\\d+)\\sMal\\spro\\sStunde";
@@ -52,6 +54,7 @@ public class EbayDetailParser {
 
         item.setPaymentMethods(parsePaymentMethods(document));
         item.setSold(parseSold(document));
+        item.setSoldPercentage(parseSoldPercentage(document));
         item.setAvailable(parseAvailable(document));
         item.setSoldLastDay(parseSoldLastDay(document));
         item.setClicksPerHour(parseClicksPerHour(document));
@@ -138,6 +141,17 @@ public class EbayDetailParser {
             Matcher matcher = Pattern.compile(SOLD_PATTERN).matcher(why2buyElement.text());
             if (matcher.find()) {
                 return Integer.valueOf(matcher.group(1).replaceAll("[.,]", ""));
+            }
+        }
+        return 0;
+    }
+
+    private double parseSoldPercentage(Element element) {
+        Element why2buyElement = element.getElementById("why2buy");
+        if (why2buyElement != null) {
+            Matcher matcher = Pattern.compile(SOLD_PERCENTAGE_PATTERN).matcher(why2buyElement.text());
+            if (matcher.find()) {
+                return Double.valueOf(matcher.group(1).replaceAll("[.,]", ""));
             }
         }
         return 0;

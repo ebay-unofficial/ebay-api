@@ -13,6 +13,8 @@ public class EbayDetailItem extends EbaySearchItem {
 
     private int sold;
 
+    private double soldPercentage;
+
     private int soldLastDay;
 
     private int available;
@@ -52,6 +54,14 @@ public class EbayDetailItem extends EbaySearchItem {
 
     public void setSold(int sold) {
         this.sold = sold;
+    }
+
+    public double getSoldPercentage() {
+        return soldPercentage;
+    }
+
+    public void setSoldPercentage(double soldPercentage) {
+        this.soldPercentage = soldPercentage;
     }
 
     public int getSoldLastDay() {
