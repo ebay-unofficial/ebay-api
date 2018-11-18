@@ -92,4 +92,9 @@ public class EbaySearchResult {
     public int getAdSize() {
         return ads.size();
     }
+
+    public EbaySearchResult crop(int limit) {
+        items = items.subList(0, limit);
+        return this;
+    }
 }

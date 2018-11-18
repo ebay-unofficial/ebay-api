@@ -37,16 +37,29 @@ public class EbayController {
             @RequestParam(value = "description", required = false, defaultValue = "false") boolean description,
             @RequestParam(value = "limit", required = false, defaultValue = "25") int limit
     ) {
-        return searchParser.getSearch(new EbaySearchRequest(search)
+        EbaySearchRequest ebaySearchRequest = new EbaySearchRequest(search)
                 .isAuctions(auction)
                 .isBuyNow(buyNow)
                 .isSold(sold)
                 .preferLocation(location)
                 .withZip(zip)
                 .searchInDescription(description)
-                .orderBy(order)
-                .limit(limit)
-        );
+                .orderBy(order);
+
+        EbaySearchResult ebaySearchResult;
+        if (limit <= 25) {
+            ebaySearchResult = searchParser.getSearch(ebaySearchRequest.limit(25));
+        } else if (limit <= 50) {
+            ebaySearchResult = searchParser.getSearch(ebaySearchRequest.limit(50));
+        } else if (limit <= 100) {
+            ebaySearchResult = searchParser.getSearch(ebaySearchRequest.limit(100));
+        } else if (limit <= 200) {
+            ebaySearchResult = searchParser.getSearch(ebaySearchRequest.limit(200));
+        } else {
+            ebaySearchResult = searchParser.getSearch(ebaySearchRequest.limit(200));
+        }
+
+        return ebaySearchResult.crop(limit);
     }
 
     @RequestMapping("/item/{id}")
