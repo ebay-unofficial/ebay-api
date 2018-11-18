@@ -84,6 +84,11 @@ public class EbaySearchRequest {
         return this;
     }
 
+    public EbaySearchRequest page(int page) {
+        params+= "&_pgn=" + page;
+        return this;
+    }
+
     @Override
     public String toString() {
         try {

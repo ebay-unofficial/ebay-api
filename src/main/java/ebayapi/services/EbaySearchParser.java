@@ -203,7 +203,8 @@ public class EbaySearchParser {
     }
 
     private boolean isPriceRange(Element element) {
-        return parseImages(element).get(0).getType().equals("m");
+        List<EbayItemImage> ebayItemImages = parseImages(element);
+        return !ebayItemImages.isEmpty() && ebayItemImages.get(0).getType().equals("m");
     }
 
     private boolean isEbayPlus(Element element) {

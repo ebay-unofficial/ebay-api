@@ -97,4 +97,10 @@ public class EbaySearchResult {
         items = items.subList(0, limit);
         return this;
     }
+
+    public EbaySearchResult merge(EbaySearchResult other) {
+        this.items.addAll(other.items);
+        this.ads.addAll(other.ads);
+        return this;
+    }
 }
