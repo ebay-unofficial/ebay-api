@@ -93,14 +93,36 @@ public class EbaySearchResult {
         return ads.size();
     }
 
-    public EbaySearchResult crop(int limit) {
+    public EbaySearchResult cropStart(int limit) {
+        items = items.subList(items.size() - limit, items.size());
+        return this;
+    }
+
+    public EbaySearchResult cropEnd(int limit) {
         items = items.subList(0, limit);
         return this;
     }
 
-    public EbaySearchResult merge(EbaySearchResult other) {
+    public EbaySearchResult crop(int size) {
+        return crop(size, 0);
+    }
+
+    public EbaySearchResult crop(int size, int shift) {
+        items = items.subList(shift, shift + size);
+        return this;
+    }
+
+    public EbaySearchResult append(EbaySearchResult other) {
         this.items.addAll(other.items);
         this.ads.addAll(other.ads);
+        return this;
+    }
+
+    public EbaySearchResult prepend(EbaySearchResult other) {
+        other.items.addAll(this.items);
+        other.ads.addAll(this.ads);
+        this.items = other.items;
+        this.ads = other.ads;
         return this;
     }
 }
