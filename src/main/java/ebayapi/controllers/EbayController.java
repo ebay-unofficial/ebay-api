@@ -96,40 +96,9 @@ public class EbayController {
         return ebaySearchResult.crop(limit, limit * (page-1) - ebayLimit * (ebayPage - 1));
     }
 
-    private int requestCount(int limit, int page, int ebayLimit) {
-        int start = limit * (page - 1) + 1;
-        int end = limit * page ;
-        return (int) Math.ceil(end / (double) ebayLimit) - start / ebayLimit;
-    }
-
     @RequestMapping("/item/{id}")
     public EbayDetailItem getItem(@PathVariable String id) {
         return detailParser.parseDetailItem(id);
     }
 
-    @RequestMapping("/test")
-    public String testRequestCount(
-            @RequestParam(value = "limit", required = false, defaultValue = "25") int limit,
-            @RequestParam(value = "page", required = false, defaultValue = "1") int page
-    ) {
-        int count = Integer.MAX_VALUE;
-        int requestLimit = 0;
-
-
-        if (limit <= 25) {
-            count = requestCount(limit, page, 25);
-            requestLimit = 25;
-        } else if (limit <= 50) {
-            count = requestCount(limit, page, 50);
-            requestLimit = 50;
-        } else if (limit <= 100) {
-            count = requestCount(limit, page, 100);
-            requestLimit = 100;
-        } else {
-            count = requestCount(limit, page, 200);
-            requestLimit = 200;
-        }
-
-        return count + " " + requestLimit;
-    }
 }
