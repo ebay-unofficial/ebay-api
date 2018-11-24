@@ -1,7 +1,6 @@
 package ebayapi.models;
 
 import ebayapi.utils.EbayItemCondition;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +10,7 @@ public class EbaySearchResult {
 
     private String id;
 
-    private String url;
+    private List<String> urls = new ArrayList<>();
 
     private List<EbaySearchItem> items = new ArrayList<>();
 
@@ -23,7 +22,9 @@ public class EbaySearchResult {
 
     Map<EbayItemCondition, Integer> conditionCount = new HashMap<>();
 
-    public EbaySearchResult() { this(""); }
+    public EbaySearchResult() {
+        this("");
+    }
 
     public EbaySearchResult(String id) {
         this.id = id;
@@ -53,12 +54,16 @@ public class EbaySearchResult {
         this.ads = ads;
     }
 
-    public String getUrl() {
-        return url;
+    public List<String> getUrls() {
+        return urls;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setUrls(List<String> urls) {
+        this.urls = urls;
+    }
+
+    public void addUrl(String url) {
+        this.urls.add(url);
     }
 
     public int getTotal() {
@@ -93,20 +98,6 @@ public class EbaySearchResult {
         return ads.size();
     }
 
-    public EbaySearchResult cropStart(int limit) {
-        items = items.subList(items.size() - limit, items.size());
-        return this;
-    }
-
-    public EbaySearchResult cropEnd(int limit) {
-        items = items.subList(0, limit);
-        return this;
-    }
-
-    public EbaySearchResult crop(int size) {
-        return crop(size, 0);
-    }
-
     public EbaySearchResult crop(int size, int shift) {
         items = items.subList(shift, shift + size);
         return this;
@@ -115,14 +106,17 @@ public class EbaySearchResult {
     public EbaySearchResult append(EbaySearchResult other) {
         this.items.addAll(other.items);
         this.ads.addAll(other.ads);
+        this.urls.addAll(other.urls);
         return this;
     }
 
     public EbaySearchResult prepend(EbaySearchResult other) {
         other.items.addAll(this.items);
         other.ads.addAll(this.ads);
+        other.urls.addAll(this.urls);
         this.items = other.items;
         this.ads = other.ads;
+        this.urls = other.urls;
         return this;
     }
 }
