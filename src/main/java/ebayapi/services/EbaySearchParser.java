@@ -5,19 +5,18 @@ import ebayapi.models.EbaySearchItem;
 import ebayapi.models.EbaySearchResult;
 import ebayapi.utils.EbayItemCondition;
 import ebayapi.utils.EbaySearchRequest;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class EbaySearchParser {
@@ -38,7 +37,7 @@ public class EbaySearchParser {
 
         Document document = Jsoup.parse(html);
 
-        result.setUrl(httpService.getLastRequest());
+        result.addUrl(httpService.getLastRequest());
         result.setItems(parseSearchItems(document));
         result.setAds(parseSearchAds(document));
         result.setTotal(parseTotalCount(document));
@@ -87,7 +86,8 @@ public class EbaySearchParser {
         element.select("input[name=LH_ItemCondition]").forEach(conditionInput -> {
             Element conditionElement = conditionInput.nextElementSibling();
             Element conditionValue = conditionElement.nextElementSibling();
-            conditionCounts.put(EbayItemCondition.parse(conditionElement.text()), Integer.valueOf(conditionValue.text().replaceAll("[.,()]", "")));
+            conditionCounts.put(EbayItemCondition.parse(conditionElement.text()),
+                    Integer.valueOf(conditionValue.text().replaceAll("[.,()]", "")));
         });
 
         return conditionCounts;
