@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/ebay-unofficial/ebay-api.svg?branch=master)](https://travis-ci.com/ebay-unofficial/ebay-api)
 # unofficial ebay-api
 You can use `http://ebay.timkilian.pl/api/` or host it yourself.
 
