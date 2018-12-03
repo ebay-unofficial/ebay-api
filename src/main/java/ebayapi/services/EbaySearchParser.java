@@ -77,7 +77,7 @@ public class EbaySearchParser {
     }
 
     private int parseTotalCount(Element element) {
-        return Integer.valueOf(element.select(".rsHdr .rcnt").first().text().replace(".", ""));
+        return Integer.valueOf(element.select(".rcnt").first().text().replace(".", ""));
     }
 
     private Map<EbayItemCondition, Integer> parseConditionCount(Element element) {
