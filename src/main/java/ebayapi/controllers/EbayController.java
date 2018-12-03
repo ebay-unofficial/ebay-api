@@ -35,12 +35,14 @@ public class EbayController {
             @RequestParam(value = "sold", required = false, defaultValue = "false") boolean sold,
             @RequestParam(value = "location", required = false, defaultValue = "") String location,
             @RequestParam(value = "order", required = false, defaultValue = "") String order,
+            @RequestParam(value = "seller", required = false, defaultValue = "") String seller,
             @RequestParam(value = "zip", required = false, defaultValue = "") String zip,
             @RequestParam(value = "description", required = false, defaultValue = "false") boolean description,
             @RequestParam(value = "limit", required = false, defaultValue = "25") int limit,
             @RequestParam(value = "page", required = false, defaultValue = "1") int page
     ) {
             EbaySearchRequest ebaySearchRequest = new EbaySearchRequest(search)
+                    .setSeller(seller)
                     .isAuctions(auction)
                     .isBuyNow(buyNow)
                     .isSold(sold)
@@ -101,4 +103,8 @@ public class EbayController {
         return detailParser.parseDetailItem(id);
     }
 
+    @RequestMapping("/seller/{name}/items")
+    public EbaySearchResult getSellerItems(@PathVariable String name) {
+        return null;
+    }
 }
