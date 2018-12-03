@@ -94,7 +94,7 @@ public class EbayDetailParser {
     private double parsePrice(Element element) {
         if (isBuyNow(element)) {
             return Double.parseDouble(element.getElementById("prcIsum").attr("content"));
-        } else if (isAuction(element)){
+        } else if (isAuction(element)) {
             return Double.parseDouble(element.getElementById("prcIsum_bidPrice").attr("content"));
         }
         return -1;
@@ -162,7 +162,7 @@ public class EbayDetailParser {
     }
 
     private int parseSoldLastDay(Element element) {
-        Element why2buyElement = element.select("a.vi-pop-drkgry").first();
+        Element why2buyElement = element.getElementById("vi_notification_new");
         if (why2buyElement != null) {
             Matcher matcher = Pattern.compile(SOLD_PATTERN).matcher(why2buyElement.text());
             if (matcher.find()) {

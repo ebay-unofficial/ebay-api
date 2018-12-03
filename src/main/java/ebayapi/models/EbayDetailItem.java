@@ -1,6 +1,7 @@
 package ebayapi.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ public class EbayDetailItem extends EbaySearchItem {
 
     private int sold;
 
-    private double soldPercentage;
+    private double soldPercentage = -1;
 
     private int soldLastDay;
 
@@ -56,8 +57,9 @@ public class EbayDetailItem extends EbaySearchItem {
         this.sold = sold;
     }
 
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public double getSoldPercentage() {
-        if (soldPercentage == 0) {
+        if (soldPercentage == 0 && available > 0) {
             return Math.round(1000 * (1 - ((double) available / sold))) / 10.0;
         }
         return soldPercentage;
@@ -67,6 +69,7 @@ public class EbayDetailItem extends EbaySearchItem {
         this.soldPercentage = soldPercentage;
     }
 
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public int getSoldLastDay() {
         return soldLastDay;
     }
@@ -75,6 +78,7 @@ public class EbayDetailItem extends EbaySearchItem {
         this.soldLastDay = soldLastDay;
     }
 
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public int getAvailable() {
         return available;
     }
@@ -83,6 +87,7 @@ public class EbayDetailItem extends EbaySearchItem {
         this.available = available;
     }
 
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public int getClicksPerHour() {
         return clicksPerHour;
     }
