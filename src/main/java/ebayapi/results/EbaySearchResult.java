@@ -1,5 +1,6 @@
-package ebayapi.models;
+package ebayapi.results;
 
+import ebayapi.models.EbaySearchItem;
 import ebayapi.utils.EbayItemCondition;
 import java.util.ArrayList;
 import java.util.HashMap;

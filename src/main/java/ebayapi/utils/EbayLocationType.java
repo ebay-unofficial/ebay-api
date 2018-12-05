@@ -7,7 +7,7 @@ public enum EbayLocationType {
     CONTINENTAL(2),
     GLOBAL(3);
 
-    Integer id;
+    public Integer id;
 
     EbayLocationType(Integer i) {
         id = i;

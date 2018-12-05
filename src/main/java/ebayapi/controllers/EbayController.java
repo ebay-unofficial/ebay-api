@@ -1,15 +1,15 @@
 package ebayapi.controllers;
 
 import ebayapi.models.EbayDetailItem;
-import ebayapi.models.EbaySearchResult;
-import ebayapi.services.EbayDetailParser;
+import ebayapi.parsers.EbaySuggestionsParser;
+import ebayapi.results.EbaySearchResult;
+import ebayapi.parsers.EbayDetailParser;
+import ebayapi.results.EbaySuggestionResult;
 import ebayapi.services.EbayHttpService;
-import ebayapi.utils.EbayLocationType;
-import ebayapi.utils.EbayOrderType;
-import ebayapi.utils.EbaySearchRequest;
-import ebayapi.services.EbaySearchParser;
-import java.util.ArrayList;
-import java.util.List;
+import ebayapi.requests.EbaySearchRequest;
+import ebayapi.parsers.EbaySearchParser;
+
+import ebayapi.requests.EbaySuggestionRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +23,9 @@ public class EbayController {
 
     @Autowired
     EbaySearchParser searchParser;
+
+    @Autowired
+    EbaySuggestionsParser suggestionsParser;
 
     @Autowired
     EbayDetailParser detailParser;
@@ -106,5 +109,10 @@ public class EbayController {
     @RequestMapping("/seller/{name}/items")
     public EbaySearchResult getSellerItems(@PathVariable String name) {
         return null;
+    }
+
+    @RequestMapping("/suggest")
+    public EbaySuggestionResult getSuggestions(@RequestParam("kwd") String keyword) {
+        return suggestionsParser.parse(new EbaySuggestionRequest(keyword));
     }
 }

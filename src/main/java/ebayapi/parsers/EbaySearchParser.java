@@ -1,10 +1,11 @@
-package ebayapi.services;
+package ebayapi.parsers;
 
 import ebayapi.models.EbayItemImage;
 import ebayapi.models.EbaySearchItem;
-import ebayapi.models.EbaySearchResult;
+import ebayapi.results.EbaySearchResult;
+import ebayapi.services.EbayHttpService;
 import ebayapi.utils.EbayItemCondition;
-import ebayapi.utils.EbaySearchRequest;
+import ebayapi.requests.EbaySearchRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

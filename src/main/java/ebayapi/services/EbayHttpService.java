@@ -1,6 +1,7 @@
 package ebayapi.services;
 
-import ebayapi.utils.EbaySearchRequest;
+import ebayapi.requests.EbayRequest;
+import ebayapi.requests.EbaySearchRequest;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -17,7 +18,6 @@ public class EbayHttpService {
 
     Logger log = LoggerFactory.getLogger(this.getClass());
 
-    private String baseUrl = "https://www.ebay.de";
     private String lastRequest = "";
 
     public EbayHttpService() {
@@ -28,9 +28,8 @@ public class EbayHttpService {
         HttpClient httpClient = HttpClientBuilder.create().build();
         try {
             lastRequest = url;
-            String fullUrl = baseUrl + url;
-            HttpResponse response = httpClient.execute(new HttpGet(fullUrl));
-            log.info("Request: status: {}, url: {}", response.getStatusLine().getStatusCode(), fullUrl);
+            HttpResponse response = httpClient.execute(new HttpGet(url));
+            log.info("Request: status: {}, url: {}", response.getStatusLine().getStatusCode(), url);
 
             return IOUtils.toString(response.getEntity().getContent());
         } catch (IOException e) {
@@ -39,11 +38,11 @@ public class EbayHttpService {
         return null;
     }
 
-    public String httpGet(EbaySearchRequest request) {
+    public String httpGet(EbayRequest request) {
         return httpGet(request.toString());
     }
 
     public String getLastRequest() {
-        return baseUrl + lastRequest;
+        return lastRequest;
     }
 }

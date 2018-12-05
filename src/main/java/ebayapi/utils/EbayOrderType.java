@@ -11,7 +11,7 @@ public enum EbayOrderType {
     LOWEST_PRICE_FIRST(15),
     HIGHEST_PRICE_FIRST(16);
 
-    Integer id;
+    public Integer id;
 
     EbayOrderType(Integer i) {
         id = i;

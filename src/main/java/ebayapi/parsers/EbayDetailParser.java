@@ -1,4 +1,5 @@
-package ebayapi.services;
+package ebayapi.parsers;
+
 
 import ebayapi.models.EbayDetailItem;
 import ebayapi.models.EbayItemImage;
@@ -7,7 +8,6 @@ import ebayapi.utils.EbayItemCondition;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,11 +15,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Service
-public class EbayDetailParser {
 
-    @Autowired
-    private EbayHttpService httpService;
+@Service
+public class EbayDetailParser extends EbayParser {
 
     private static final String DECIMAL_PATTERN = "(\\d+([.,]\\d+)?)";
 

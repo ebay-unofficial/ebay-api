@@ -1,27 +1,27 @@
-package ebayapi.utils;
+package ebayapi.requests;
 
-import ebayapi.models.EbaySearchResult;
+import ebayapi.utils.EbayLocationType;
+import ebayapi.utils.EbayOrderType;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
-public class EbaySearchRequest {
-
-    private Logger log = LoggerFactory.getLogger(this.getClass());
+public class EbaySearchRequest extends EbayRequest {
 
     private String term;
 
-    private Map<String, String> params = new LinkedHashMap<>();
+    private String type;
 
     private String seller;
 
     public EbaySearchRequest(String term) {
         this.term = term;
+        try {
+            params.put("_nkw", URLEncoder.encode(term, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
     public EbaySearchRequest isComplete(boolean complete) {
@@ -107,6 +107,11 @@ public class EbaySearchRequest {
 
     public EbaySearchRequest setSeller(String seller) {
         this.seller = seller;
+        return this.setType(seller.isEmpty() ? "i" : seller + "/m");
+    }
+
+    public EbaySearchRequest setType(String type) {
+        this.type = type;
         return this;
     }
 
@@ -121,20 +126,12 @@ public class EbaySearchRequest {
     }
 
     @Override
-    public String toString() {
-        StringBuilder paramsBuilder = new StringBuilder();
-        params.forEach((key, value) -> {
-            paramsBuilder.append("&" + key + "=" + value);
-        });
-        try {
-            String type = "i";
-            if (!seller.isEmpty()) {
-                type = seller + "/m";
-            }
-            return  "/sch/" + type + ".html?_nkw=" + URLEncoder.encode(term, "UTF-8") + paramsBuilder;
-        } catch (UnsupportedEncodingException e) {
-            log.error("Failed to encode params: {}", term, e);
-        }
-        return null;
+    protected String baseUrl() {
+        return "https://www.ebay.de";
+    }
+
+    @Override
+    protected String path() {
+        return "/sch/" + type + ".html";
     }
 }
